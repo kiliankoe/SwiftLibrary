@@ -2,12 +2,13 @@ import Foundation
 
 public enum Command {
     case search(query: String)
+    case info(package: String)
     case add(package: String)
     case remove(package: String)
     case list
 
     public static var all: String {
-        return "search <query>, add <package-name>, remove <package-name>, list"
+        return "search <query>, info <package_name>, add <package_name>, remove <package_name>, list"
     }
 
     public init?(from strings: [String]) {
@@ -17,6 +18,10 @@ public enum Command {
             guard strings.count >= 2 else { return nil }
             let query = strings.dropFirst().joined(separator: " ")
             self = .search(query: query)
+        case "info", "i":
+            guard strings.count == 2 else { return nil }
+            let package = strings[1]
+            self = .info(package: package)
         case "add", "a":
             guard strings.count == 2 else { return nil }
             let package = strings[1]

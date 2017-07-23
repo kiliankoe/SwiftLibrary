@@ -6,6 +6,8 @@ class CommandTests: XCTestCase {
         let validCommands = [
             ["search", "foo"],
             ["s", "bar"],
+            ["info", "foo"],
+            ["i", "bar"],
             ["add", "baz"],
             ["a", "foo"],
             ["remove", "bar"],
