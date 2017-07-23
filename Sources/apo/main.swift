@@ -48,9 +48,9 @@ guard let command = Command(from: cli.unparsedArguments) else {
 
 switch command {
 case .search(let query):
-    print("Searching for \(query)...")
+    if verbosity.wasSet { print("Searching for \(query)...") }
 case .info(let package):
-    print("Getting info for \(package)...")
+    if verbosity.wasSet { print("Getting info for \(package)...") }
 default:
     print("This command is not yet supported.".yellow)
 }
