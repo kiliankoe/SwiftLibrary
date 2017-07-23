@@ -1,3 +1,3 @@
-# apodidae
+# Apodidae
 
-A description of this package.
+This project is still very much a work in progress. Please check back later or watch the repo if you're interested.
