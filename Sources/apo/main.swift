@@ -29,14 +29,20 @@ do {
     exit(1)
 }
 
-guard !help.value || cli.unparsedArguments.count == 0 else {
-    cli.printUsage()
+guard !help.wasSet else {
+    print(Command.exampleUsage)
     exit(0)
 }
 
+guard cli.unparsedArguments.count != 0 else {
+    print("No command given".yellow)
+    print("See --help for example usage.")
+    exit(1)
+}
+
 guard let command = Command(from: cli.unparsedArguments) else {
-    print("Unrecognized command".red)
-    print("Currently supported are:\n\(Command.all)")
+    print("Unrecognized command '\(cli.unparsedArguments.joined(separator: " "))'".red)
+    print("See --help for example usage.")
     exit(1)
 }
 

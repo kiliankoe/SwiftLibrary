@@ -7,8 +7,15 @@ public enum Command {
     case remove(package: String)
     case list
 
-    public static var all: String {
-        return "search <query>, info <package_name>, add <package_name>, remove <package_name>, list"
+    public static var exampleUsage: String {
+        return """
+        Example usage:
+            apo search <query>
+            apo info <package_name>
+            apo add <package_name>
+            apo remove <package_name>
+            apo list
+        """
     }
 
     public init?(from strings: [String]) {
