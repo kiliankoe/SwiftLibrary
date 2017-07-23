@@ -1,7 +1,7 @@
 import XCTest
 @testable import ApodidaeCore
 
-class DateTests: XCTestCase {
+class ApodidaeTests: XCTestCase {
     func testExample() {
         XCTAssert(true)
     }
