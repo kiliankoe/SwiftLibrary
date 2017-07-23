@@ -20,6 +20,8 @@ let package = Package(
         .target(
             name: "apo",
             dependencies: ["ApodidaeCore", "CommandLine", "Rainbow"]),
+        .testTarget(
+            name: "ApodidaeTests",
             dependencies: ["ApodidaeCore"]),
     ]
 )
