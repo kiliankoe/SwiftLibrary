@@ -10,13 +10,14 @@ let package = Package(
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/jatoben/CommandLine", from: "3.0.0-pre1"),
         .package(url: "https://github.com/onevcat/Rainbow", from: "2.0.1"),
+        .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "ApodidaeCore",
-            dependencies: []),
+            dependencies: ["PromiseKit"]),
         .target(
             name: "apo",
             dependencies: ["ApodidaeCore", "CommandLine", "Rainbow"]),
