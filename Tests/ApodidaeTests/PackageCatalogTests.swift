@@ -69,7 +69,7 @@ class PackageCatalogTests: XCTestCase {
         }
         XCTAssertEqual(response.packages[0].name, "mxcl/PromiseKit")
         XCTAssertEqual(response.packages[0].description, "Promises for Swift & ObjC")
-        XCTAssertEqual(response.packages[0].url, "https://github.com/mxcl/PromiseKit.git")
+        XCTAssertEqual(response.packages[0].url.absoluteString, "https://github.com/mxcl/PromiseKit.git")
         XCTAssertEqual(response.packages[0].latestVersion, "4.2.1")
     }
 

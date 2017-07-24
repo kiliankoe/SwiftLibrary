@@ -11,7 +11,7 @@ public struct Package {
         self.name = package.name
         self.description = package.description
         self.source = .ibmpackagecatalog
-        self.url = URL(string: package.url)!
+        self.url = package.url
         self.latestVersion = package.latestVersion
     }
 }

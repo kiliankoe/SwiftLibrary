@@ -27,7 +27,7 @@ struct PCResponse: Decodable {
 public struct PCPackage: Decodable {
     public let name: String
     public let description: String
-    public let url: String
+    public let url: URL
     public let latestVersion: String?
 
     private enum CodingKeys: String, CodingKey {
@@ -47,7 +47,7 @@ public struct PCPackage: Decodable {
 
         self.name = try container.decode(String.self, forKey: .name)
         self.description = try container.decode(String.self, forKey: .description)
-        self.url = try container.decode(String.self, forKey: .url)
+        self.url = try container.decode(URL.self, forKey: .url)
         self.latestVersion = try container.decodeIfPresent(String.self, forKey: .latestVersion)
     }
 }
