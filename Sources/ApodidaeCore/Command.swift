@@ -6,6 +6,7 @@ public enum Command {
     case home(package: String)
     case add(package: String)
     case remove(package: String)
+    case submit
     case list
 
     public static var exampleUsage: String {
@@ -16,6 +17,7 @@ public enum Command {
             apo home <package_name>
             apo add <package_name>
             apo remove <package_name>
+            apo submit
             apo list
         """
     }
@@ -43,6 +45,8 @@ public enum Command {
             guard strings.count == 2 else { return nil }
             let package = strings[1]
             self = .remove(package: package)
+        case "submit":
+            self = .submit
         case "list", "l":
             self = .list
         default:
