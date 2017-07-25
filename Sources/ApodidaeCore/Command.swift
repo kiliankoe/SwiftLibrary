@@ -3,6 +3,7 @@ import Foundation
 public enum Command {
     case search(query: String)
     case info(package: String)
+    case home(package: String)
     case add(package: String)
     case remove(package: String)
     case list
@@ -12,6 +13,7 @@ public enum Command {
         Example usage:
             apo search <query>
             apo info <package_name>
+            apo home <package_name>
             apo add <package_name>
             apo remove <package_name>
             apo list
@@ -29,6 +31,10 @@ public enum Command {
             guard strings.count == 2 else { return nil }
             let package = strings[1]
             self = .info(package: package)
+        case "home", "h":
+            guard strings.count == 2 else { return nil }
+            let package = strings[1]
+            self = .home(package: package)
         case "add", "a":
             guard strings.count == 2 else { return nil }
             let package = strings[1]
