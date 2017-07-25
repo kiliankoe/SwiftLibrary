@@ -1,24 +1,32 @@
 import Foundation
 
-public struct Package {
-    public let name: String
-    public let description: String
-    public let source: Source
-    public let url: URL
-    public let latestVersion: String?
+public protocol Package {
+    var name: String { get }
+    var description: String { get }
+    var homepage: URL? { get }
+    var repository: URL { get }
+    var latestVersion: String? { get }
+    var stars: Int { get }
+    var source: Source { get }
+}
 
-    public init(from package: PCPackage) {
-        self.name = package.name
-        self.description = package.description
-        self.source = .ibmpackagecatalog
-        self.url = package.url
-        self.latestVersion = package.latestVersion
+public enum Source {
+    case ibmpackagecatalog
+    case librariesio
+}
+
+extension PCPackage: Package {
+    public var homepage: URL? {
+        return self.repository
+    }
+
+    public var source: Source {
+        return .ibmpackagecatalog
     }
 }
 
-extension Package {
-    public enum Source {
-        case ibmpackagecatalog
-        case librariesio
+extension LIOPackage: Package {
+    public var source: Source {
+        return .librariesio
     }
 }
