@@ -53,7 +53,7 @@ class LibrariesIOTests: XCTestCase {
             return
         }
 
-        XCTAssertEqual(packages[0].name, "github.com/ReactiveX/RxSwift")
+        XCTAssertEqual(packages[0].name, "ReactiveX/RxSwift")
         XCTAssertEqual(packages[0].description, "Reactive Programming in Swift")
         XCTAssertEqual(packages[0].homepage?.absoluteString, nil)
         XCTAssertEqual(packages[0].repository.absoluteString, "https://github.com/ReactiveX/RxSwift")

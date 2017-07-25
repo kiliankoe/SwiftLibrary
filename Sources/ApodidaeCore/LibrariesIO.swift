@@ -22,7 +22,8 @@ public struct LIOPackage: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.decode(String.self, forKey: .name)
+        let rawName = try container.decode(String.self, forKey: .name)
+        self.name = rawName.replacingOccurrences(of: "github.com/", with: "")
         self.description = try container.decode(String.self, forKey: .description)
         let rawHomepageString = try container.decodeIfPresent(String.self, forKey: .homepage)
         if
