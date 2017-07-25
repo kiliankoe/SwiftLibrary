@@ -18,9 +18,10 @@ cli.formatOutput = { s, type in
 }
 
 let help = BoolOption(shortFlag: "h", longFlag: "help", helpMessage: "Display this help message")
+let version = BoolOption(longFlag: "version", helpMessage: "Output the version of apodidae")
 let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages")
 
-cli.addOptions(help, verbosity)
+cli.addOptions(help, version, verbosity)
 
 do {
     try cli.parse()
@@ -31,6 +32,11 @@ do {
 
 guard !help.wasSet else {
     print(Command.exampleUsage)
+    exit(0)
+}
+
+guard !version.wasSet else {
+    print("0.1.0")
     exit(0)
 }
 
