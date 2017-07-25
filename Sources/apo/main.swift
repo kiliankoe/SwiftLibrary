@@ -36,7 +36,7 @@ guard !help.wasSet else {
 }
 
 guard !version.wasSet else {
-    print("0.1.0")
+    print("0.1.0") // TODO: Pull this from elsewhere
     exit(0)
 }
 
