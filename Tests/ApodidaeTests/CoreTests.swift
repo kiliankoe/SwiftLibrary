@@ -5,7 +5,7 @@ class CoreTests: XCTestCase {
     func testPCOnlySearch() {
         let e = expectation(description: "Find some packages")
 
-        Core.searchAll(query: "rxswift", librariesIOApiKey: nil, isVerbose: true).then { packages in
+        Core.searchAll(query: "rxswift", librariesIOApiKey: nil, isVerbose: false).then { packages in
             XCTAssert(packages.count > 0)
             e.fulfill()
         }.catch { error in
@@ -19,7 +19,7 @@ class CoreTests: XCTestCase {
     func testAllSearch() {
         let e = expectation(description: "Find some packages")
 
-        Core.searchAll(query: "rxswift", librariesIOApiKey: ProcessInfo.processInfo.environment["LIBRARIESIO_APIKEY"]!, isVerbose: true).then { packages in
+        Core.searchAll(query: "rxswift", librariesIOApiKey: ProcessInfo.processInfo.environment["LIBRARIESIO_APIKEY"]!, isVerbose: false).then { packages in
             XCTAssert(packages.count > 0)
             e.fulfill()
         }.catch { error in
