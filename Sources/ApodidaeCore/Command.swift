@@ -7,7 +7,6 @@ public enum Command {
     case add(package: String)
     case remove(package: String)
     case submit
-    case list
 
     public static var exampleUsage: String {
         return """
@@ -18,7 +17,6 @@ public enum Command {
             apo add <package_name>
             apo remove <package_name>
             apo submit
-            apo list
         """
     }
 
@@ -47,8 +45,6 @@ public enum Command {
             self = .remove(package: package)
         case "submit":
             self = .submit
-        case "list", "l":
-            self = .list
         default:
             return nil
         }
