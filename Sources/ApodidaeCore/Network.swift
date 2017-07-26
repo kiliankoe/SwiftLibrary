@@ -28,7 +28,6 @@ enum Network {
                     fulfill(decoded)
                 } catch let error {
                     reject(error)
-                    return
                 }
             }.resume()
         }
