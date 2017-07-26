@@ -2,8 +2,19 @@ import Foundation
 import Files
 
 public struct Config: Codable {
-    public let librariesIOApiKey: String
+    private let librariesIOApiKey: String
     public let disableLibrariesIO: Bool?
+
+    public var lioAPIKey: String? {
+        // For future reference: The API Key is not an optional property on the config since I always want it written to the config file,
+        // but an empty value is obviously not a valid value.
+        if let lioDisabled = disableLibrariesIO, lioDisabled {
+            return nil
+        } else if librariesIOApiKey.isEmpty {
+            return nil
+        }
+        return librariesIOApiKey
+    }
 
     public static let configFileName = ".apodidae.json"
     public static let configFilePath = "\(Folder.home.path)\(Config.configFileName)"
@@ -26,5 +37,13 @@ public struct Config: Codable {
         encoder.outputFormatting = .prettyPrinted
         let data = try encoder.encode(emptyConfig)
         try configFile.write(data: data)
+    }
+
+    public func printLIOWarningIfNecessary() {
+        if lioAPIKey == nil && !(disableLibrariesIO ?? false) {
+            print("Searching only on packagecatalog.com. To search on libraries.io as well please copy your".yellow)
+            print("API Key (found here: https://libraries.io/account) into \(Config.configFilePath).".yellow)
+            print("Otherwise you may also optionally disable this warning via the config file.".yellow)
+        }
     }
 }

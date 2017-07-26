@@ -61,22 +61,15 @@ do {
     exit(1)
 }
 
-var config: Config? = nil
+// Implicitly unwrapped since the compiler can't see the exit(1) in the catch block
+let config: Config!
 do {
     config = try Config.read()
 } catch {
-    print("There was an error reading the config file: \(error)".red)
+    print("There was an error reading the config file: \(error)\n".red)
+    print("Delete it to have it recreated with default values on the next run.".red)
     exit(1)
 }
-let lioAPIKey: String?
-if let librariesIOAPIKey = config?.librariesIOApiKey, !librariesIOAPIKey.isEmpty {
-    // For future reference: The API Key is not an optional property on the config since I always want it written to the config file,
-    // but an empty value is obviously not a valid value.
-    lioAPIKey = librariesIOAPIKey
-} else {
-    lioAPIKey = nil
-}
-
 
 switch command {
 case .search(let query):
