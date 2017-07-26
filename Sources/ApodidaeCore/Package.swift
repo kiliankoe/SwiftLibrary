@@ -14,10 +14,20 @@ public protocol Package {
 extension Package {
     public var cliRepresentation: String {
         return """
-        - \(self.name.bold) \(self.latestVersion ?? "")
-          \((self.homepage?.absoluteString ?? "No URL found").italic)
+        - \(self.name.bold) \(self.latestVersion ?? "") \(self.source)
+          \((self.bestguessURL.absoluteString).italic)
           \(self.description)
         """
+    }
+
+    public var bestguessURL: URL {
+        if let homepage = homepage {
+            return homepage
+        } else if !repository.absoluteString.contains("github.com/github.com") || !repository.absoluteString.contains("git@github.com") {
+            // Oddly specific, but seems to occur rather frequently on libraries.io
+            return repository
+        }
+        return URL(string: "https://github.com/\(name)")!
     }
 }
 
