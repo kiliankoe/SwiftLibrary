@@ -8,16 +8,17 @@ class CommandTests: XCTestCase {
             ["s", "bar"],
             ["info", "foo"],
             ["i", "bar"],
+            ["home", "foo"],
+            ["h", "bar"],
             ["add", "baz"],
             ["a", "foo"],
             ["remove", "bar"],
             ["r", "baz"],
-            ["list"],
-            ["l"],
+            ["submit"]
         ]
         for command in validCommands {
             guard let _ = Command(from: command) else {
-                XCTFail("Failed to initialize valid command")
+                XCTFail("Failed to initialize valid command with \(command)")
                 return
             }
         }
