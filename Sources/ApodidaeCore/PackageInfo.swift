@@ -60,13 +60,14 @@ public struct PackageInfo: Decodable {
         \(description)
 
         \(stars) stargazers
-        published \(published)
-
         License: \(license)
-        Swift Version: \(swiftVersion)
-        Versions: \(versions)
 
-        Dependencies:\(dependencies)
+        last published \(published)
+        Versions: \(versions)
+        Swift Version: \(swiftVersion)
+
+        Dependencies:
+          \(dependencies)
         """
     }
 }
