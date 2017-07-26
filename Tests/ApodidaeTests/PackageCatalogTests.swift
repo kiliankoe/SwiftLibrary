@@ -76,7 +76,7 @@ class PackageCatalogTests: XCTestCase {
     func testSearch() {
         let e = expectation(description: "Get some data")
 
-        PackageCatalog.search(query: "apodidae").then { packages in
+        PackageCatalog.search(query: "apodidae", isVerbose: true).then { packages in
             XCTAssert(packages.count > 0)
             e.fulfill()
         }.catch { error in

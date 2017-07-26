@@ -49,7 +49,9 @@ public struct LibrariesIO {
         self.apiKey = key
     }
 
-    public func search(query: String) -> Promise<[LIOPackage]> {
+    public func search(query: String, isVerbose: Bool) -> Promise<[LIOPackage]> {
+        if isVerbose { print("Searching for \(query) on libraries.io...") }
+
         let params = [
             "q": query,
             "api_key": self.apiKey,
@@ -61,6 +63,6 @@ public struct LibrariesIO {
         }
 
         let request = URLRequest(url: url)
-        return Network.dataTask(request: request)
+        return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 }

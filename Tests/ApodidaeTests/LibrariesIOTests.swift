@@ -64,7 +64,7 @@ class LibrariesIOTests: XCTestCase {
         let e = expectation(description: "Get some data")
 
         let apiKey = ProcessInfo.processInfo.environment["LIBRARIESIO_APIKEY"]!
-        LibrariesIO(withAPIKey: apiKey).search(query: "RxSwift").then { packages in
+        LibrariesIO(withAPIKey: apiKey).search(query: "RxSwift", isVerbose: true).then { packages in
             print(packages)
             XCTAssert(packages.count > 0)
             e.fulfill()

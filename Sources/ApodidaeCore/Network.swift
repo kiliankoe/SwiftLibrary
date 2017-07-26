@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 enum Network {
-    static func dataTask<T: Decodable>(request: URLRequest) -> Promise<T> {
+    static func dataTask<T: Decodable>(request: URLRequest, isVerbose: Bool) -> Promise<T> {
         return Promise { fulfill, reject in
             URLSession.shared.dataTask(with: request) { data, response, error in
                 guard error == nil else {
