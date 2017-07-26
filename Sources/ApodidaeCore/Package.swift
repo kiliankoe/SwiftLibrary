@@ -1,6 +1,5 @@
 import Foundation
 import Rainbow
-import Releases
 
 public struct Package: Decodable {
     public let name: String
@@ -12,15 +11,6 @@ public struct Package: Decodable {
     public var repository: URL {
         let urlString = self.gitCloneURL.absoluteString.replacingOccurrences(of: ".git", with: "")
         return URL(string: urlString)!
-    }
-
-    public var versions: [Version] {
-        do {
-            return try Releases.versions(for: self.gitCloneURL)
-        } catch {
-            print("Encountered error on fetching releases: \(error)")
-            return []
-        }
     }
 
     public var cliRepresentation: String {
