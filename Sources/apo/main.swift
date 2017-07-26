@@ -65,7 +65,14 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    if verbosity.wasSet { print("Getting info for \(package)...") }
+    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+        print(packageInfo.cliRepresentation)
+        exit(0)
+    }.catch { error in
+        print("Encountered the following error: \(error)".red)
+        exit(1)
+    }
+    RunLoop.main.run(until: Date.distantFuture)
 default:
     print("This command is not yet supported.".yellow)
 }

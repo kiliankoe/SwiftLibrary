@@ -40,4 +40,15 @@ public enum PackageCatalog {
             return Promise(value: response.packages)
         }
     }
+
+    public static func getInfo(for package: String, isVerbose: Bool) -> Promise<PackageInfo> {
+        if isVerbose { print("Searching for \(package)'s details on packagecatalog.com...") }
+
+        guard let url = URL(string: "https://packagecatalog.com/data/package/\(package)") else {
+            return Promise(error: Error.invalidQuery)
+        }
+
+        let request = URLRequest(url: url)
+        return Network.dataTask(request: request, isVerbose: isVerbose)
+    }
 }
