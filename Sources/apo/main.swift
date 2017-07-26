@@ -68,6 +68,15 @@ do {
     print("There was an error reading the config file: \(error)".red)
     exit(1)
 }
+let lioAPIKey: String?
+if let librariesIOAPIKey = config?.librariesIOApiKey, !librariesIOAPIKey.isEmpty {
+    // For future reference: The API Key is not an optional property on the config since I always want it written to the config file,
+    // but an empty value is obviously not a valid value.
+    lioAPIKey = librariesIOAPIKey
+} else {
+    lioAPIKey = nil
+}
+
 
 switch command {
 case .search(let query):

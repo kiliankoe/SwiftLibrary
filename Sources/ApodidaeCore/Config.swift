@@ -2,7 +2,7 @@ import Foundation
 import Files
 
 public struct Config: Codable {
-    public let librariesIOApiKey: String?
+    public let librariesIOApiKey: String
     public let disableLibrariesIO: Bool?
 
     public static let configFileName = ".apodidae.json"
@@ -20,7 +20,7 @@ public struct Config: Codable {
 
     public static func initializeIfNecessary() throws {
         guard !Folder.home.containsFile(named: configFileName) else { return } // this doesn't check the contents of the config file
-        let emptyConfig = Config(librariesIOApiKey: nil, disableLibrariesIO: false)
+        let emptyConfig = Config(librariesIOApiKey: "", disableLibrariesIO: false)
         let configFile = try Folder.home.createFile(named: configFileName)
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
