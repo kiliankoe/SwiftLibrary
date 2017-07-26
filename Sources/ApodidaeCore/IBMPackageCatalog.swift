@@ -48,11 +48,14 @@ public struct Package: Decodable {
     }
 
     public var cliRepresentation: String {
-        return """
-        - \(self.name.bold) \(self.latestVersion ?? "")
-          \((self.repository.absoluteString).italic)
-          \(self.description)
-        """
+        var output = """
+            - \(self.name.bold) \(self.latestVersion ?? "")
+              \((self.repository.absoluteString).italic)
+            """
+        if !self.description.isEmpty {
+            output += "\n  \(self.description)"
+        }
+        return output
     }
 
     private enum CodingKeys: String, CodingKey {
