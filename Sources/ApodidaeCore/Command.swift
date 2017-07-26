@@ -6,7 +6,7 @@ public enum Command {
     case home(package: String)
     case add(package: String)
     case remove(package: String)
-    case submit
+    case submit(package: String?)
 
     public static var exampleUsage: String {
         return """
@@ -21,8 +21,8 @@ public enum Command {
               Add the given package to your Package.swift's dependencies.
           apo remove <package_name>
               Remove the given package from your Package.swift's dependencies.
-          apo submit
-              Submit the package in the current directory to packagecatalog.com.
+          apo submit <optional: package_name>
+              Submit the package in the current directory or a specified other one to packagecatalog.com.
         """
     }
 
@@ -50,7 +50,12 @@ public enum Command {
             let package = strings[1]
             self = .remove(package: package)
         case "submit":
-            self = .submit
+            if strings.count == 2 {
+                let package = strings[1]
+                self = .submit(package: package)
+            } else {
+                self = .submit(package: nil)
+            }
         default:
             return nil
         }
