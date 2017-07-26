@@ -54,6 +54,21 @@ guard let command = Command(from: cli.unparsedArguments) else {
     exit(1)
 }
 
+do {
+    try Config.initializeIfNecessary()
+} catch {
+    print("There was an error creating the config file: \(error)".red)
+    exit(1)
+}
+
+var config: Config? = nil
+do {
+    config = try Config.read()
+} catch {
+    print("There was an error reading the config file: \(error)".red)
+    exit(1)
+}
+
 switch command {
 case .search(let query):
     if verbosity.wasSet { print("Searching for \(query)...") }
