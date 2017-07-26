@@ -11,12 +11,18 @@ public enum Command {
     public static var exampleUsage: String {
         return """
         Commands:
-            apo search <query>
-            apo info <package_name>
-            apo home <package_name>
-            apo add <package_name>
-            apo remove <package_name>
-            apo submit
+          apo search <query>
+              Search for the query on all available sources.
+          apo info <package_name>
+              Get additional info to a package.
+          apo home <package_name>
+              Open the homepage of a package in your browser.
+          apo add <package_name>
+              Add the given package to your Package.swift's dependencies.
+          apo remove <package_name>
+              Remove the given package from your Package.swift's dependencies.
+          apo submit
+              Submit the package in the current directory to packagecatalog.com.
         """
     }
 
