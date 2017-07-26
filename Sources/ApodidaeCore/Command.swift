@@ -11,7 +11,7 @@ public enum Command {
 
     public static var exampleUsage: String {
         return """
-        Example usage:
+        Commands:
             apo search <query>
             apo info <package_name>
             apo home <package_name>
