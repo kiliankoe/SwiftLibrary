@@ -73,7 +73,20 @@ do {
 
 switch command {
 case .search(let query):
-    if verbosity.wasSet { print("Searching for \(query)...") }
+    config.printLIOWarningIfNecessary()
+
+//    let semaphore = DispatchSemaphore(value: 0)
+    Core.searchAll(query: query, librariesIOApiKey: config.lioAPIKey, isVerbose: verbosity.wasSet).then { packages in
+        print("Found \(packages.count) package(s).\n")
+        packages.forEach { print($0.cliRepresentation) }
+//        semaphore.signal()
+    }.catch { error in
+        print("Encountered the following error: \(error)")
+        exit(1)
+    }
+//    semaphore.wait()
+    // Am I blocking the execution of the search with `semaphore.wait()`?!
+    RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
     if verbosity.wasSet { print("Getting info for \(package)...") }
 default:
