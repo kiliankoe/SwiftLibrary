@@ -2,6 +2,7 @@ import Foundation
 import ApodidaeCore
 import CommandLineKit
 import Rainbow
+import ShellOut
 
 let cli = CommandLine()
 
@@ -67,6 +68,15 @@ case .search(let query):
 case .info(let package):
     PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
         print(packageInfo.cliRepresentation)
+        exit(0)
+    }.catch { error in
+        print("Encountered the following error: \(error)".red)
+        exit(1)
+    }
+    RunLoop.main.run(until: Date.distantFuture)
+case .home(let package):
+    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+        try shellOut(to: "open \(packageInfo.githubURL.absoluteString)")
         exit(0)
     }.catch { error in
         print("Encountered the following error: \(error)".red)

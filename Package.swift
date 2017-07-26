@@ -12,6 +12,7 @@ let package = Package(
         .package(url: "https://github.com/onevcat/Rainbow", from: "2.0.1"),
         .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1")),
         .package(url: "https://github.com/JohnSundell/Files", from: "1.10.0"),
+        .package(url: "https://github.com/JohnSundell/ShellOut", from: "1.1.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -21,7 +22,7 @@ let package = Package(
             dependencies: ["PromiseKit", "Files", "Rainbow"]),
         .target(
             name: "apo",
-            dependencies: ["ApodidaeCore", "CommandLine"]),
+            dependencies: ["ApodidaeCore", "CommandLine", "ShellOut"]),
         .testTarget(
             name: "ApodidaeTests",
             dependencies: ["ApodidaeCore"]),

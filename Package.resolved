@@ -57,7 +57,7 @@
       },
       {
         "package": "ShellOut",
-        "repositoryURL": "https://github.com/JohnSundell/ShellOut.git",
+        "repositoryURL": "https://github.com/JohnSundell/ShellOut",
         "state": {
           "branch": null,
           "revision": "38cd16db073d7c250cefdda177dc14d11597ed04",
