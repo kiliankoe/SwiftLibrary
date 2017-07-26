@@ -54,39 +54,16 @@ guard let command = Command(from: cli.unparsedArguments) else {
     exit(1)
 }
 
-do {
-    try Config.initializeIfNecessary()
-} catch {
-    print("There was an error creating the config file: \(error)".red)
-    exit(1)
-}
-
-// Implicitly unwrapped since the compiler can't see the exit(1) in the catch block
-let config: Config!
-do {
-    config = try Config.read()
-} catch {
-    print("There was an error reading the config file: \(error)\n".red)
-    print("Delete it to have it recreated with default values on the next run.".red)
-    exit(1)
-}
-
 switch command {
 case .search(let query):
-    config.printLIOWarningIfNecessary()
-
-//    let semaphore = DispatchSemaphore(value: 0)
-    Core.searchAll(query: query, librariesIOApiKey: config.lioAPIKey, isVerbose: verbosity.wasSet).then { packages in
-        print("Found \(packages.count) package(s).\n")
+    PackageCatalog.search(query: query, isVerbose: verbosity.wasSet).then { packages in
         packages.forEach { print($0.cliRepresentation) }
-//        semaphore.signal()
+        exit(0)
     }.catch { error in
-        print("Encountered the following error: \(error)")
+        print("Encountered the following error: \(error)".red)
         exit(1)
     }
-//    semaphore.wait()
-    // Am I blocking the execution of the search with `semaphore.wait()`?!
-    RunLoop.main.run(until: Date() + 4)
+    RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
     if verbosity.wasSet { print("Getting info for \(package)...") }
 default:

@@ -1,8 +1,9 @@
 import Foundation
 import PromiseKit
+import Rainbow
 
 struct PCResponse: Decodable {
-    let packages: [PCPackage]
+    let packages: [Package]
 
     private enum RootKeys: String, CodingKey {
         case data
@@ -20,21 +21,34 @@ struct PCResponse: Decodable {
         let rootContainer = try decoder.container(keyedBy: RootKeys.self)
         let dataContainer = try rootContainer.nestedContainer(keyedBy: DataKeys.self, forKey: .data)
         let hitsContainer = try dataContainer.nestedContainer(keyedBy: HitsKeys.self, forKey: .hits)
-        self.packages = try hitsContainer.decode([PCPackage].self, forKey: .hits)
+        self.packages = try hitsContainer.decode([Package].self, forKey: .hits)
     }
 }
 
-public struct PCPackage: Decodable {
+public struct Package: Decodable {
     public let name: String
     public let description: String
-    public let repository: URL
+    public let gitCloneURL: URL
     public let latestVersion: String?
     public let stars: Int
+
+    public var repository: URL {
+        let urlString = self.gitCloneURL.absoluteString.replacingOccurrences(of: ".git", with: "")
+        return URL(string: urlString)!
+    }
+
+    public var cliRepresentation: String {
+        return """
+        - \(self.name.bold) \(self.latestVersion ?? "")
+          \((self.repository.absoluteString).italic)
+          \(self.description)
+        """
+    }
 
     private enum CodingKeys: String, CodingKey {
         case name = "package_full_name"
         case description
-        case repository = "git_clone_url"
+        case gitCloneURL = "git_clone_url"
         case latestVersion = "latest_version"
         case stars = "stargazers_count"
     }
@@ -49,14 +63,14 @@ public struct PCPackage: Decodable {
 
         self.name = try container.decode(String.self, forKey: .name)
         self.description = try container.decode(String.self, forKey: .description)
-        self.repository = try container.decode(URL.self, forKey: .repository)
+        self.gitCloneURL = try container.decode(URL.self, forKey: .gitCloneURL)
         self.latestVersion = try container.decodeIfPresent(String.self, forKey: .latestVersion)
         self.stars = try container.decode(Int.self, forKey: .stars)
     }
 }
 
 public enum PackageCatalog {
-    public static func search(query: String, isVerbose: Bool) -> Promise<[PCPackage]> {
+    public static func search(query: String, isVerbose: Bool) -> Promise<[Package]> {
         if isVerbose { print("Searching for \(query) on packagecatalog.com...") }
 
         guard
