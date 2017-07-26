@@ -36,6 +36,6 @@ class CommandTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testInit", testInit)
+        ("testInit", testInit),
     ]
 }

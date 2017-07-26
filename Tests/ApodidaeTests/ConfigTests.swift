@@ -67,4 +67,12 @@ class ConfigTests: XCTestCase {
         let config = try! JSONDecoder().decode(Config.self, from: json)
         XCTAssertNil(config.lioAPIKey)
     }
+
+    static var allTests = [
+        ("testSerialization", testSerialization),
+        ("testKeyEnabled", testKeyEnabled),
+        ("testKeyButDisabled", testKeyButDisabled),
+        ("testEmptyKeyButEnabled", testEmptyKeyButEnabled),
+        ("testEmptyKeyDisabled", testEmptyKeyDisabled),
+    ]
 }

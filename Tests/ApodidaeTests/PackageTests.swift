@@ -72,4 +72,8 @@ class PackageTests: XCTestCase {
         XCTAssertEqual(response.packages[0].repository.absoluteString, "https://github.com/mxcl/PromiseKit")
         XCTAssertEqual(response.packages[0].latestVersion, "4.2.1")
     }
+
+    static var allTests = [
+        ("testDeserialization", testDeserialization),
+    ]
 }

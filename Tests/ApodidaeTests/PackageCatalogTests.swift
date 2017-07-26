@@ -15,4 +15,8 @@ class PackageCatalogTests: XCTestCase {
 
         waitForExpectations(timeout: 5)
     }
+
+    static var allTests = [
+        ("testSearch", testSearch),
+    ]
 }

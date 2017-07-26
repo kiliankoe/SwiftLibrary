@@ -54,4 +54,8 @@ class PackageInfoTests: XCTestCase {
         XCTAssertEqual(info.license, "MIT License")
         XCTAssertEqual(info.versions[0].tag, "0.1.0")
     }
+
+    static var allTests = [
+        ("testDeserialization", testDeserialization),
+    ]
 }
