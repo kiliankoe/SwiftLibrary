@@ -86,7 +86,7 @@ case .search(let query):
     }
 //    semaphore.wait()
     // Am I blocking the execution of the search with `semaphore.wait()`?!
-    RunLoop.main.run(until: Date.distantFuture)
+    RunLoop.main.run(until: Date() + 4)
 case .info(let package):
     if verbosity.wasSet { print("Getting info for \(package)...") }
 default:
