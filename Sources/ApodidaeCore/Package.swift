@@ -1,4 +1,5 @@
 import Foundation
+import Rainbow
 
 public protocol Package {
     var name: String { get }
@@ -8,6 +9,16 @@ public protocol Package {
     var latestVersion: String? { get }
     var stars: Int { get }
     var source: Source { get }
+}
+
+extension Package {
+    public var cliRepresentation: String {
+        return """
+        - \(self.name.bold) \(self.latestVersion ?? "")
+          \((self.homepage?.absoluteString ?? "No URL found").italic)
+          \(self.description)
+        """
+    }
 }
 
 public enum Source {
