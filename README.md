@@ -22,7 +22,7 @@ Apodidae exposes a handful of commands. Their use is probably best shown with a 
 
 #### Searching for packages
 
-```shell
+```
 $ apo search RxSwift
 - ReactiveX/RxSwift 3.6.1
   https://github.com/ReactiveX/RxSwift
@@ -35,7 +35,7 @@ $ apo search RxSwift
 
 #### Getting info on a package
 
-```shell
+```
 $ apo info ReactiveX/RxSwift
 ReactiveX/RxSwift 3.6.1
 https://github.com/ReactiveX/RxSwift
@@ -56,7 +56,7 @@ You can also run `apo home ReactiveX/RxSwift` to directly open the homepage to a
 
 #### Adding a package
 
-```shell
+```
 $ apo add ReactiveX/RxSwift
 The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.
 
@@ -70,7 +70,7 @@ Apodidae will try to figure out if the project in the current directory uses Swi
 
 #### Submitting a package to IBM's Package Catalog
 
-```shell
+```
 $ apo submit https://github.com/ReactiveX/RxSwift
 Package successfully submitted to packagecatalog.com
 ```
