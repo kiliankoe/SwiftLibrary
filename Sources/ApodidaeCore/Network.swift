@@ -14,12 +14,12 @@ enum Network {
                     let response = response as? HTTPURLResponse,
                     let data = data
                 else {
-                    reject(Error.network)
+                    reject(APOError.network)
                     return
                 }
 
                 guard response.statusCode / 100 == 2 else {
-                    reject(Error.server(statusCode: response.statusCode))
+                    reject(APOError.server(statusCode: response.statusCode))
                     return
                 }
 

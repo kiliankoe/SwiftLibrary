@@ -1,4 +1,4 @@
-public enum Error: Swift.Error {
+public enum APOError: Error {
     case invalidQuery
     case network
     case server(statusCode: Int)

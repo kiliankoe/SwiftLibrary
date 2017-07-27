@@ -32,7 +32,7 @@ public enum PackageCatalog {
             let escaped = query.urlHostEscaped,
             let url = URL(string: "https://packagecatalog.com/api/search/\(escaped)?page=1&items=100&chart=moststarred")
         else {
-            return Promise(error: Error.invalidQuery)
+            return Promise(error: APOError.invalidQuery)
         }
 
         let request = URLRequest(url: url)
@@ -45,7 +45,7 @@ public enum PackageCatalog {
         if isVerbose { print("Searching for \(package)'s details on packagecatalog.com...") }
 
         guard let url = URL(string: "https://packagecatalog.com/data/package/\(package)") else {
-            return Promise(error: Error.invalidQuery)
+            return Promise(error: APOError.invalidQuery)
         }
 
         let request = URLRequest(url: url)
