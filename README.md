@@ -23,7 +23,7 @@ Apodidae exposes a handful of commands. Their use is probably best shown with a 
 #### Searching for packages
 
 ```
-$ apo search RxSwift
+$ apo search rxswift
 - ReactiveX/RxSwift 3.6.1
   https://github.com/ReactiveX/RxSwift
   Reactive Programming in Swift
@@ -36,7 +36,7 @@ $ apo search RxSwift
 #### Getting info on a package
 
 ```
-$ apo info ReactiveX/RxSwift
+$ apo info rxswift
 ReactiveX/RxSwift 3.6.1
 https://github.com/ReactiveX/RxSwift
 Reactive Programming in Swift
@@ -57,7 +57,7 @@ You can also run `apo home ReactiveX/RxSwift` to directly open the homepage to a
 #### Adding a package
 
 ```
-$ apo add ReactiveX/RxSwift
+$ apo add rxswift
 The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.
 
 .package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1")
@@ -81,9 +81,9 @@ If you want to submit the package in your current working directory you can just
 
 ## Known Issues
 
-At this point? Several 🙈
+The basic functionality is there, but several parts of the very young codebase need some work. The project should also best be covered by a few more tests.
 
-Found something as well? Please don't hesitate to [open an issue](https://github.com/kiliankoe/apodidae/issues/new).
+Did you run into any issues or have questions? Please don't hesitate to [open an issue](https://github.com/kiliankoe/apodidae/issues/new).
 
 
 
