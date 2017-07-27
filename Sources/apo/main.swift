@@ -68,7 +68,7 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
         print(packageInfo.cliRepresentation)
         exit(0)
     }.catch { error in
@@ -77,7 +77,7 @@ case .info(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
-    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
         try shellOut(to: "open \(packageInfo.githubURL.absoluteString)")
         exit(0)
     }.catch { error in
@@ -86,7 +86,7 @@ case .home(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
-    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version

@@ -52,6 +52,15 @@ public enum PackageCatalog {
         return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 
+    public static func getInfoAfterSearch(for package: String, isVerbose: Bool) -> Promise<PackageInfo> {
+        return search(query: package, isVerbose: isVerbose).then { packages in
+            guard packages.count > 0 else {
+                return Promise(error: APOError.server(statusCode: 404))
+            }
+            return getInfo(for: packages[0].name, isVerbose: isVerbose)
+        }
+    }
+
     public static func submit(url: URL, isVerbose: Bool) -> Promise<Data> {
         if isVerbose { print("Submitting \(url.absoluteString) to packagecatalog.com...") }
         let url = URL(string: "https://packagecatalog.com/api/packages")!
