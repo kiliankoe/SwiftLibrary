@@ -12,7 +12,10 @@ IBM has committed to building a fantastic catalog of packages aptly named [Packa
 
 ## Installation
 
-Apodidae is still at a very, *very* early point in its life. At this point you're still going to have to build it yourself, sorry. This will hopefully change soon enough.
+```
+$ brew tap kiliankoe/formulae
+$ brew install apodidae
+```
 
 
 
