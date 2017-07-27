@@ -18,11 +18,13 @@ cli.formatOutput = { s, type in
     return cli.defaultFormat(s: str, type: type)
 }
 
-let help = BoolOption(shortFlag: "h", longFlag: "help", helpMessage: "Display this help message")
-let version = BoolOption(longFlag: "version", helpMessage: "Output the version of apodidae")
-let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages")
+let help = BoolOption(shortFlag: "h", longFlag: "help", helpMessage: "Display this help message.")
+let version = BoolOption(longFlag: "version", helpMessage: "Output the version of apodidae.")
+let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages.")
 
-cli.addOptions(help, version, verbosity)
+let swiftVersionFlag = IntOption(longFlag: "swiftversion", helpMessage: "Manually specify a swift version for the generated dependency string on `apo add`.")
+
+cli.addOptions(help, version, verbosity, swiftVersionFlag)
 
 do {
     try cli.parse()
@@ -80,6 +82,40 @@ case .home(let package):
         exit(0)
     }.catch { error in
         print("Encountered the following error: \(error)".red)
+        exit(1)
+    }
+    RunLoop.main.run(until: Date.distantFuture)
+case .add(let package):
+    PackageCatalog.getInfo(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+        let swiftVersion: SwiftVersion
+        if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
+            swiftVersion = version
+        } else {
+            swiftVersion = SwiftVersion.readFromLocalPackage()
+        }
+
+        let possiblePackageString: String?
+        if let latestVersion = packageInfo.versions.first?.tag, latestVersion.lowercased() != "latest" {
+            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .version(latestVersion))
+        } else {
+            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
+        }
+
+        guard let packageString = possiblePackageString else {
+            print("Could not generate a package string with this requirement for Swift 3.".red) // Currently only possible in that case.
+            exit(1)
+        }
+
+        try! shellOut(to: "echo '\(packageString)' | pbcopy")
+        print("The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.")
+        print()
+        print(packageString.green)
+        print()
+        print("Please bear in mind that apodidae can not know if it is actually possible to include this package in your project.")
+        print("This is just \("some".italic) available package from packagecatalog.com including its last publicized version.")
+        exit(0)
+    }.catch { error in
+        print(error.localizedDescription)
         exit(1)
     }
     RunLoop.main.run(until: Date.distantFuture)

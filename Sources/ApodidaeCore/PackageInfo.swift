@@ -71,6 +71,34 @@ public struct PackageInfo: Decodable {
           \(dependencies)
         """
     }
+
+    public enum Requirement {
+        case version(String)
+        case branch(String)
+        case revision(String)
+
+        var packageString: String {
+            switch self {
+            case .version(let version):
+                return "from: \"\(version)\""
+            case .branch(let branch):
+                return ".branch(\"\(branch)\")"
+            case .revision(let revision):
+                return ".revision(\"\(revision)\")"
+            }
+        }
+    }
+
+    public func dependencyRepresentation(for swiftVersion: SwiftVersion, requirement: Requirement) -> String? {
+        switch swiftVersion {
+        case .v3:
+            guard case .version(let version) = requirement else { return nil }
+            let versionComponents = version.components(separatedBy: ".")
+            return ".Package(url: \"\(self.githubURL)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1]))"
+        case .v4:
+            return ".package(url: \"\(self.githubURL)\", \(requirement.packageString))"
+        }
+    }
 }
 
 extension PackageInfo {
