@@ -12,8 +12,6 @@ class CommandTests: XCTestCase {
             ["h", "bar"],
             ["add", "baz"],
             ["a", "foo"],
-            ["remove", "bar"],
-            ["r", "baz"],
             ["submit"],
             ["submit", "foobar"]
         ]
