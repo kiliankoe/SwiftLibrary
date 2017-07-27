@@ -70,7 +70,7 @@ case .info(let package):
         print(packageInfo.cliRepresentation)
         exit(0)
     }.catch { error in
-        print("Encountered the following error: \(error)".red)
+        print(error.localizedDescription)
         exit(1)
     }
     RunLoop.main.run(until: Date.distantFuture)
