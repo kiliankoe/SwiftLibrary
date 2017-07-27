@@ -18,7 +18,7 @@ Apodidae is still at a very, *very* early point in its life. At this point you'r
 
 ## Usage
 
-Apodidae exposes a handful of commands. Their use is probably best shown with a few examples.
+Apodidae exposes a handful of commands. Their use is probably best shown with a few examples. [Here's a link](https://asciinema.org/a/130908) to asciinema for a short usage demo recording if you prefer that.
 
 #### Searching for packages
 
