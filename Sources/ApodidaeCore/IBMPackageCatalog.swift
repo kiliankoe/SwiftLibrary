@@ -51,4 +51,13 @@ public enum PackageCatalog {
         let request = URLRequest(url: url)
         return Network.dataTask(request: request, isVerbose: isVerbose)
     }
+
+    public static func submit(url: URL, isVerbose: Bool) -> Promise<Data> {
+        if isVerbose { print("Submitting \(url.absoluteString) to packagecatalog.com...") }
+        let url = URL(string: "https://packagecatalog.com/api/packages")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = "{\"giturl\": \"\(url.absoluteString)\"}".data(using: .utf8)
+        return Network.dataTask(request: request, isVerbose: isVerbose)
+    }
 }
