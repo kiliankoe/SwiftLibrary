@@ -51,7 +51,8 @@ public struct PackageInfo: Decodable {
     }
 
     public var cliRepresentation: String {
-        let versions = self.versions.map { $0.tag }.joined(separator: " ")
+        let versions = self.versions.count >= 10 ? self.versions.map { $0.tag }[..<10].joined(separator: ", ") : self.versions.map { $0.tag }.joined(separator: ", ") // umm...
+        let moreVersions = versions.count >= 10 ? ", ..." : ""
         let dependencies = self.dependencies.count > 0 ? self.dependencies.map { $0.name }.joined(separator: "\n  ") : " None"
 
         return """
@@ -64,8 +65,7 @@ public struct PackageInfo: Decodable {
         Supports Swift \(swiftVersion)
 
         Last published: \(published)
-        Versions:
-        \(versions)
+        Last Versions: \(versions)\(moreVersions)
 
         Dependencies:
           \(dependencies)
