@@ -1,11 +1,11 @@
 import Foundation
 
 public enum Command {
-    case search(query: String)
-    case info(package: String)
-    case home(package: String)
-    case add(package: String)
-    case submit(package: String?)
+    case search(String)
+    case info(String)
+    case home(String)
+    case add(String)
+    case submit(String?)
 
     public static var exampleUsage: String {
         return """
@@ -28,26 +28,26 @@ public enum Command {
         switch first.lowercased() {
         case "search", "s":
             guard strings.count >= 2 else { return nil }
-            let query = strings.dropFirst().joined(separator: " ")
-            self = .search(query: query)
+            let package = strings.dropFirst().joined(separator: " ")
+            self = .search(package)
         case "info", "i":
-            guard strings.count == 2 else { return nil }
-            let package = strings[1]
-            self = .info(package: package)
+            guard strings.count >= 2 else { return nil }
+            let package = strings.dropFirst().joined(separator: " ")
+            self = .info(package)
         case "home", "h":
-            guard strings.count == 2 else { return nil }
-            let package = strings[1]
-            self = .home(package: package)
+            guard strings.count >= 2 else { return nil }
+            let package = strings.dropFirst().joined(separator: " ")
+            self = .home(package)
         case "add", "a":
-            guard strings.count == 2 else { return nil }
-            let package = strings[1]
-            self = .add(package: package)
+            guard strings.count >= 2 else { return nil }
+            let package = strings.dropFirst().joined(separator: " ")
+            self = .add(package)
         case "submit":
             if strings.count == 2 {
-                let package = strings[1]
-                self = .submit(package: package)
+                let url = strings[1]
+                self = .submit(url)
             } else {
-                self = .submit(package: nil)
+                self = .submit(nil)
             }
         default:
             return nil
