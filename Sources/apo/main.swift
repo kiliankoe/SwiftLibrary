@@ -63,7 +63,7 @@ case .search(let query):
         packages.forEach { print($0.cliRepresentation) }
         exit(0)
     }.catch { error in
-        print("Encountered the following error: \(error)".red)
+        print(error.localizedDescription)
         exit(1)
     }
     RunLoop.main.run(until: Date.distantFuture)
@@ -81,7 +81,7 @@ case .home(let package):
         try shellOut(to: "open \(packageInfo.githubURL.absoluteString)")
         exit(0)
     }.catch { error in
-        print("Encountered the following error: \(error)".red)
+        print(error.localizedDescription)
         exit(1)
     }
     RunLoop.main.run(until: Date.distantFuture)
