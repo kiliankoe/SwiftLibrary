@@ -1,6 +1,8 @@
 ![header](https://user-images.githubusercontent.com/2625584/28693159-c1ae88fa-7323-11e7-8ce3-1980fdf2a925.png)
 
 
+[![Travis](https://img.shields.io/travis/kiliankoe/apodidae.svg?style=flat-square)](https://travis-ci.org/kiliankoe/apodidae/)
+[![GitHub (pre-)release](https://img.shields.io/github/release/kiliankoe/apodidae/all.svg?style=flat-square)]()
 
 Apodidae is intended to be the quickest way to search for packages in the Swift ecosystem. By design, Swift pulls dependencies from any git repo, most of which are hosted on GitHub, but distributed amongst many thousands of users. This is fantastic to work with, but what it gains in ease of use, this method definitely lacks in discoverability.
 
