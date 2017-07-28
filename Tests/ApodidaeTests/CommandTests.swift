@@ -12,9 +12,8 @@ class CommandTests: XCTestCase {
             ["h", "bar"],
             ["add", "baz"],
             ["a", "foo"],
-            ["remove", "bar"],
-            ["r", "baz"],
-            ["submit"]
+            ["submit"],
+            ["submit", "foobar"]
         ]
         for command in validCommands {
             guard let _ = Command(from: command) else {
@@ -35,6 +34,6 @@ class CommandTests: XCTestCase {
     }
 
     static var allTests = [
-        ("testInit", testInit)
+        ("testInit", testInit),
     ]
 }

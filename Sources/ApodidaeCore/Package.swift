@@ -1,53 +1,49 @@
 import Foundation
 import Rainbow
 
-public protocol Package {
-    var name: String { get }
-    var description: String { get }
-    var homepage: URL? { get }
-    var repository: URL { get }
-    var latestVersion: String? { get }
-    var stars: Int { get }
-    var source: Source { get }
-}
+public struct Package: Decodable {
+    public let name: String
+    public let description: String
+    public let gitCloneURL: URL
+    public let latestVersion: String?
+    public let stars: Int
 
-extension Package {
+    public var repository: URL {
+        let urlString = self.gitCloneURL.absoluteString.replacingOccurrences(of: ".git", with: "")
+        return URL(string: urlString)!
+    }
+
     public var cliRepresentation: String {
-        return """
-        - \(self.name.bold) \(self.latestVersion ?? "") \(self.source)
-          \((self.bestguessURL.absoluteString).italic)
-          \(self.description)
+        var output = """
+        - \(self.name.bold) \(self.latestVersion ?? "")
+          \((self.repository.absoluteString).italic)
         """
-    }
-
-    public var bestguessURL: URL {
-        if let homepage = homepage {
-            return homepage
-        } else if !repository.absoluteString.contains("github.com/github.com") || !repository.absoluteString.contains("git@github.com") {
-            // Oddly specific, but seems to occur rather frequently on libraries.io
-            return repository
+        if !self.description.isEmpty {
+            output += "\n  \(self.description)"
         }
-        return URL(string: "https://github.com/\(name)")!
-    }
-}
-
-public enum Source {
-    case ibmpackagecatalog
-    case librariesio
-}
-
-extension PCPackage: Package {
-    public var homepage: URL? {
-        return self.repository
+        return output
     }
 
-    public var source: Source {
-        return .ibmpackagecatalog
+    private enum CodingKeys: String, CodingKey {
+        case name = "package_full_name"
+        case description
+        case gitCloneURL = "git_clone_url"
+        case latestVersion = "latest_version"
+        case stars = "stargazers_count"
     }
-}
 
-extension LIOPackage: Package {
-    public var source: Source {
-        return .librariesio
+    private enum SourceKeys: String, CodingKey {
+        case source = "_source"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let sourceContainer = try decoder.container(keyedBy: SourceKeys.self)
+        let container = try sourceContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .source)
+
+        self.name = try container.decode(String.self, forKey: .name)
+        self.description = try container.decode(String.self, forKey: .description)
+        self.gitCloneURL = try container.decode(URL.self, forKey: .gitCloneURL)
+        self.latestVersion = try container.decodeIfPresent(String.self, forKey: .latestVersion)
+        self.stars = try container.decode(Int.self, forKey: .stars)
     }
 }

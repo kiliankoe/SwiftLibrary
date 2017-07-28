@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 
 struct PCResponse: Decodable {
-    let packages: [PCPackage]
+    let packages: [Package]
 
     private enum RootKeys: String, CodingKey {
         case data
@@ -20,55 +20,53 @@ struct PCResponse: Decodable {
         let rootContainer = try decoder.container(keyedBy: RootKeys.self)
         let dataContainer = try rootContainer.nestedContainer(keyedBy: DataKeys.self, forKey: .data)
         let hitsContainer = try dataContainer.nestedContainer(keyedBy: HitsKeys.self, forKey: .hits)
-        self.packages = try hitsContainer.decode([PCPackage].self, forKey: .hits)
-    }
-}
-
-public struct PCPackage: Decodable {
-    public let name: String
-    public let description: String
-    public let repository: URL
-    public let latestVersion: String?
-    public let stars: Int
-
-    private enum CodingKeys: String, CodingKey {
-        case name = "package_full_name"
-        case description
-        case repository = "git_clone_url"
-        case latestVersion = "latest_version"
-        case stars = "stargazers_count"
-    }
-
-    private enum SourceKeys: String, CodingKey {
-        case source = "_source"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let sourceContainer = try decoder.container(keyedBy: SourceKeys.self)
-        let container = try sourceContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .source)
-
-        self.name = try container.decode(String.self, forKey: .name)
-        self.description = try container.decode(String.self, forKey: .description)
-        self.repository = try container.decode(URL.self, forKey: .repository)
-        self.latestVersion = try container.decodeIfPresent(String.self, forKey: .latestVersion)
-        self.stars = try container.decode(Int.self, forKey: .stars)
+        self.packages = try hitsContainer.decode([Package].self, forKey: .hits)
     }
 }
 
 public enum PackageCatalog {
-    public static func search(query: String, isVerbose: Bool) -> Promise<[PCPackage]> {
+    public static func search(query: String, isVerbose: Bool) -> Promise<[Package]> {
         if isVerbose { print("Searching for \(query) on packagecatalog.com...") }
 
         guard
             let escaped = query.urlHostEscaped,
             let url = URL(string: "https://packagecatalog.com/api/search/\(escaped)?page=1&items=100&chart=moststarred")
         else {
-            return Promise(error: Error.invalidQuery)
+            return Promise(error: APOError.invalidQuery)
         }
 
         let request = URLRequest(url: url)
         return Network.dataTask(request: request, isVerbose: isVerbose).then { (response: PCResponse) in
             return Promise(value: response.packages)
         }
+    }
+
+    public static func getInfo(for package: String, isVerbose: Bool) -> Promise<PackageInfo> {
+        if isVerbose { print("Searching for \(package)'s details on packagecatalog.com...") }
+
+        guard let url = URL(string: "https://packagecatalog.com/data/package/\(package)") else {
+            return Promise(error: APOError.invalidQuery)
+        }
+
+        let request = URLRequest(url: url)
+        return Network.dataTask(request: request, isVerbose: isVerbose)
+    }
+
+    public static func getInfoAfterSearch(for package: String, isVerbose: Bool) -> Promise<PackageInfo> {
+        return search(query: package, isVerbose: isVerbose).then { packages in
+            guard packages.count > 0 else {
+                return Promise(error: APOError.server(statusCode: 404))
+            }
+            return getInfo(for: packages[0].name, isVerbose: isVerbose)
+        }
+    }
+
+    public static func submit(url: URL, isVerbose: Bool) -> Promise<Data> {
+        if isVerbose { print("Submitting \(url.absoluteString) to packagecatalog.com...") }
+        let url = URL(string: "https://packagecatalog.com/api/packages")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = "{\"giturl\": \"\(url.absoluteString)\"}".data(using: .utf8)
+        return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 }
