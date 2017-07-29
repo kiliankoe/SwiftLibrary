@@ -1,3 +1,5 @@
+import Foundation
+
 extension Dictionary where Key == String {
     var urlEncoded: String {
         let params = self
@@ -13,5 +15,9 @@ extension Dictionary where Key == String {
         return dict
             .map { (key: String, value: String) in return "\(key)=\(value)" }
             .joined(separator: "&")
+    }
+
+    var asJSON: Data? {
+        return try? JSONSerialization.data(withJSONObject: self)
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 import Rainbow
 
 public enum APOError: Error {
-    case invalidQuery
+    case invalidQuery(reason: String)
     case network
     case server(statusCode: Int)
 }
@@ -10,8 +10,8 @@ public enum APOError: Error {
 extension APOError: CustomStringConvertible {
     public var description: String {
         switch self {
-        case .invalidQuery:
-            return "Invalid query.".red
+        case .invalidQuery(let reason):
+            return "Invalid query: \(reason).".red
         case .network:
             return "There was an issue with the network. Perhaps your connection?".red
         case .server(statusCode: let statusCode):

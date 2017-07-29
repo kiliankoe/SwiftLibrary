@@ -31,7 +31,9 @@ enum Network {
     static func dataTask<T: Decodable>(request: URLRequest, isVerbose: Bool) -> Promise<T> {
         return dataTask(request: request, isVerbose: isVerbose).then { data -> Promise<T> in
             do {
-                let decoded = try JSONDecoder().decode(T.self, from: data)
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let decoded = try decoder.decode(T.self, from: data)
                 return Promise(value: decoded)
             } catch let error {
                 return Promise(error: error)
