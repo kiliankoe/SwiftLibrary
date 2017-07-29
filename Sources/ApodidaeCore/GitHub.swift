@@ -64,15 +64,15 @@ struct RepoQuery: GraphQLQuery {
 }
 
 public struct RepoResponse: Decodable {
-    let data: SearchResponse?
-    let error: [ErrorResponse]?
+    public let data: SearchResponse?
+    public let error: [ErrorResponse]?
 }
 
 public struct SearchResponse: Decodable {
-    let repositoryCount: Int
-    let repositories: [Repository]
-    let rateLimitRemaining: Int
-    let rateLimitResetAt: Date
+    public let repositoryCount: Int
+    public let repositories: [Repository]
+    public let rateLimitRemaining: Int
+    public let rateLimitResetAt: Date
 
     private enum SearchKeys: String, CodingKey {
         case search
