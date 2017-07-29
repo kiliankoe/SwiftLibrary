@@ -32,7 +32,9 @@ enum Network {
         return dataTask(request: request, isVerbose: isVerbose).then { data -> Promise<T> in
             do {
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
+                if #available(OSX 10.12, *) {
+                    decoder.dateDecodingStrategy = .iso8601
+                }
                 let decoded = try decoder.decode(T.self, from: data)
                 return Promise(value: decoded)
             } catch let error {

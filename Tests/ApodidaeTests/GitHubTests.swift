@@ -206,7 +206,9 @@ class GitHubTests: XCTestCase {
         """.data(using: .utf8)!
 
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+        if #available(OSX 10.12, *) {
+            decoder.dateDecodingStrategy = .iso8601
+        }
         let response = try! decoder.decode(RepoResponse.self, from: json)
 
         XCTAssertEqual(response.data?.repositories.count, 6)
