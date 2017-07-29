@@ -57,10 +57,16 @@ guard let command = Command(from: cli.unparsedArguments) else {
     exit(1)
 }
 
+let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
+
 switch command {
 case .search(let query):
-    PackageCatalog.search(query: query, isVerbose: verbosity.wasSet).then { packages in
-        packages.forEach { print($0.cliRepresentation) }
+    GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        guard let repos = response.data?.repositories else {
+            print("No packages found".yellow) // FIXME: this is also output if the API spits out an error
+            exit(0)
+        }
+        repos.forEach { print($0.shortCliRepresentation) }
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
