@@ -93,7 +93,8 @@ public struct SearchResponse: Decodable {
         let searchContainer = try decoder.container(keyedBy: SearchKeys.self)
         let container = try searchContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .search)
         self.repositoryCount = try container.decode(Int.self, forKey: .repositoryCount)
-        self.repositories = try container.decode([Repository].self, forKey: .repositories)
+        let repositories = try container.decode([Repository].self, forKey: .repositories)
+        self.repositories = repositories.filter { $0.hasPackageManifest }
         let rateLimitContainer = try searchContainer.nestedContainer(keyedBy: RateLimitKeys.self, forKey: .rateLimit)
         self.rateLimitRemaining = try rateLimitContainer.decode(Int.self, forKey: .remaining)
         self.rateLimitResetAt = try rateLimitContainer.decode(Date.self, forKey: .resetAt)
