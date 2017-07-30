@@ -111,7 +111,8 @@ public struct Repository: Decodable {
         let fork = "Fork of \(parent ?? "unknown")".yellow
 
         var output = """
-        \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)\n
+        \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
+        \(url.absoluteString.underline)\n
         """
 
         if isFork {
@@ -121,7 +122,6 @@ public struct Repository: Decodable {
         }
 
         output += """
-        \(url.absoluteString.underline)
         \(description ?? "No description available".italic)
 
         \(stargazers) stargazers
