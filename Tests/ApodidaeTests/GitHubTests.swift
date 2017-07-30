@@ -198,8 +198,9 @@ class GitHubTests: XCTestCase {
               ]
             },
             "rateLimit": {
-              "remaining": 4997,
-              "resetAt": "2017-07-29T21:06:44Z"
+              "cost": 3,
+              "remaining": 4797,
+              "resetAt": "2017-07-30T11:41:21Z"
             }
           }
         }
