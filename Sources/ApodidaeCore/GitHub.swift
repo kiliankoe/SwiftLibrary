@@ -130,6 +130,17 @@ public enum GitHub {
 
     public static func repos(with query: String, authToken: String, isVerbose: Bool) -> Promise<RepoResponse> {
         let repoQuery = RepoQuery(query: query, authToken: authToken)
-        return send(query: repoQuery, isVerbose: isVerbose)
+        return send(query: repoQuery, isVerbose: isVerbose).then { response in
+            // This is just for some pre-processing for errors and verbosity
+            if let error = response.errors?.first {
+                throw error
+            }
+            if isVerbose {
+                print("Found \(response.data?.repositoryCount ?? 0) possible repositories on GitHub, \(response.data?.repositories.count ?? 0) of which seem to include a Package.swift.")
+                print("You have \(response.data?.rateLimitRemaining ?? 0)/5000 API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
+                print()
+            }
+            return Promise(value: response)
+        }
     }
 }

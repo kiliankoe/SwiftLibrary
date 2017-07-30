@@ -62,7 +62,6 @@ let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
 switch command {
 case .search(let query):
     GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        // TODO: Output some more response output if verbose, e.g. number of results, remaining API calls
         if let error = response.errors?.first {
             throw error
         }
