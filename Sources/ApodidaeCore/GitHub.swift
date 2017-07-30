@@ -58,8 +58,12 @@ struct RepoQuery: GraphQLQuery {
     """
     let variables: [String: String]
     let header: [String: String]
-    init(query: String, accessToken: String) {
-        self.variables = ["query": "\(query) language:Swift fork:true"]
+    init(query: String, accessToken: String, searchForks: Bool) {
+        var queryString = "\(query) language:Swift" // TODO: would in:name,description be a good idea here?
+        if searchForks {
+            queryString += " fork:true"
+        }
+        self.variables = ["query": queryString]
         self.header = ["Authorization": "Bearer \(accessToken)"]
     }
 }
@@ -142,8 +146,8 @@ public enum GitHub {
         return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 
-    public static func repos(with query: String, accessToken: String, isVerbose: Bool) -> Promise<[Repository]> {
-        let repoQuery = RepoQuery(query: query, accessToken: accessToken)
+    public static func repos(with query: String, accessToken: String, searchForks: Bool, isVerbose: Bool) -> Promise<[Repository]> {
+        let repoQuery = RepoQuery(query: query, accessToken: accessToken, searchForks: searchForks)
         return send(query: repoQuery, isVerbose: isVerbose).then { response in
             if let error = response.errors?.first {
                 throw error
@@ -162,8 +166,8 @@ public enum GitHub {
         }
     }
 
-    public static func firstRepo(with query: String, accessToken: String, isVerbose: Bool) -> Promise<Repository> {
-        return repos(with: query, accessToken: accessToken, isVerbose: isVerbose).then { repos in
+    public static func firstRepo(with query: String, accessToken: String, searchForks: Bool, isVerbose: Bool) -> Promise<Repository> {
+        return repos(with: query, accessToken: accessToken, searchForks: searchForks, isVerbose: isVerbose).then { repos in
             guard let first = repos.first else {
                 throw GitHub.Error.noPackages
             }
