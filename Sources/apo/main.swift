@@ -58,7 +58,16 @@ guard let command = Command(from: cli.unparsedArguments) else {
 }
 
 try Config.initializeIfNecessary()
-let config = try Config.read()
+let config: Config
+do {
+    config = try Config.read()
+} catch let error {
+    print("There was an error reading your config at \(Config.configFilePath.italic).")
+    print("You can either fix it manually or delete the file to have it recreated on the next run.")
+    print()
+    print("\(error)".red)
+    exit(1)
+}
 guard config.githubAccessToken != Config.tokenPlaceholder else {
     print(Config.tokenWarning)
     exit(0)
