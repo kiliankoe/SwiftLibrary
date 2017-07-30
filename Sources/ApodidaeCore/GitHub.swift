@@ -110,6 +110,16 @@ public struct ErrorResponse: Decodable, Error, LocalizedError {
 }
 
 public enum GitHub {
+    public enum Error: Swift.Error, LocalizedError {
+        case noPackages
+
+        public var errorDescription: String? {
+            switch self {
+            case .noPackages: return "No packages found.".yellow
+            }
+        }
+    }
+
     static let apiBaseURL = URL(string: "https://api.github.com/graphql")!
 
     static func send<T: GraphQLQuery>(query: T, isVerbose: Bool) -> Promise<T.Response> {
@@ -128,7 +138,7 @@ public enum GitHub {
         return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 
-    public static func repos(with query: String, authToken: String, isVerbose: Bool) -> Promise<RepoResponse> {
+    public static func repos(with query: String, authToken: String, isVerbose: Bool) -> Promise<[Repository]> {
         let repoQuery = RepoQuery(query: query, authToken: authToken)
         return send(query: repoQuery, isVerbose: isVerbose).then { response in
             // This is just for some pre-processing for errors and verbosity
@@ -140,7 +150,21 @@ public enum GitHub {
                 print("You have \(response.data?.rateLimitRemaining ?? 0)/5000 API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
                 print()
             }
-            return Promise(value: response)
+
+            guard let repos = response.data?.repositories else {
+                throw GitHub.Error.noPackages
+            }
+
+            return Promise(value: repos)
+        }
+    }
+
+    public static func firstRepo(with query: String, authToken: String, isVerbose: Bool) -> Promise<Repository> {
+        return repos(with: query, authToken: authToken, isVerbose: isVerbose).then { repos in
+            guard let first = repos.first else {
+                throw GitHub.Error.noPackages
+            }
+            return Promise(value: first)
         }
     }
 }

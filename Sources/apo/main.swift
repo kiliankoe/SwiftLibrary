@@ -61,14 +61,7 @@ let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
 
 switch command {
 case .search(let query):
-    GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        if let error = response.errors?.first {
-            throw error
-        }
-        guard let repos = response.data?.repositories else {
-            print("No packages found".yellow)
-            exit(0)
-        }
+    GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repos in
         repos.forEach { print($0.shortCliRepresentation) }
         exit(0)
     }.catch { error in
@@ -77,14 +70,7 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        if let error = response.errors?.first {
-            throw error
-        }
-        guard let repo = response.data?.repositories.first else {
-            print("No such package found".yellow)
-            exit(0)
-        }
+    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
@@ -93,14 +79,7 @@ case .info(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
-    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        if let error = response.errors?.first {
-            throw error
-        }
-        guard let repo = response.data?.repositories.first else {
-            print("No such package found".yellow)
-            exit(0)
-        }
+    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
@@ -109,14 +88,7 @@ case .home(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
-    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        if let error = response.errors?.first {
-            throw error
-        }
-        guard let repo = response.data?.repositories.first else {
-            print("No such package found".yellow)
-            exit(0)
-        }
+    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
