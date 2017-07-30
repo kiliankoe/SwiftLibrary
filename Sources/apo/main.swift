@@ -73,11 +73,9 @@ guard config.githubAccessToken != Config.tokenPlaceholder else {
     exit(0)
 }
 
-let githubAuthToken = config.githubAccessToken
-
 switch command {
 case .search(let query):
-    GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repos in
+    GitHub.repos(with: query, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repos in
         if repos.count == 0 {
             print("No packages found.".yellow)
         }
@@ -89,7 +87,7 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
@@ -98,7 +96,7 @@ case .info(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
-    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
@@ -107,7 +105,7 @@ case .home(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
-    GitHub.firstRepo(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
