@@ -10,7 +10,7 @@ public enum Command {
         return """
         Commands:
           apo search <query>
-              Search for the query on all available sources.
+              Search for packages matching query.
           apo info <package_name>
               Get additional info to a package.
           apo home <package_name>
