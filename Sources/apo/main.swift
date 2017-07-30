@@ -62,6 +62,9 @@ let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
 switch command {
 case .search(let query):
     GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { repos in
+        if repos.count == 0 {
+            print("No packages found.".yellow)
+        }
         repos.forEach { print($0.shortCliRepresentation) }
         exit(0)
     }.catch { error in
