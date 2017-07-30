@@ -103,7 +103,7 @@ public struct Repository: Decodable {
         \(stargazers) stargazers
         \(license ?? "No license found")
 
-        Last updated: \(pushedAt)
+        Last updated: \(pushedAt.iso)
         Last versions: \(versions)
         """
     }
