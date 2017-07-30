@@ -89,8 +89,12 @@ case .info(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
-        try shellOut(to: "open \(packageInfo.githubURL.absoluteString)")
+    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        guard let repo = response.data?.repositories.first else {
+            print("No such package found".yellow)
+            exit(0)
+        }
+        try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
