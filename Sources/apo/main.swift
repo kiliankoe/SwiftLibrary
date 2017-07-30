@@ -57,7 +57,14 @@ guard let command = Command(from: cli.unparsedArguments) else {
     exit(1)
 }
 
-let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
+try Config.initializeIfNecessary()
+let config = try Config.read()
+guard config.githubAccessToken != Config.tokenPlaceholder else {
+    print(Config.tokenWarning)
+    exit(0)
+}
+
+let githubAuthToken = config.githubAccessToken
 
 switch command {
 case .search(let query):
