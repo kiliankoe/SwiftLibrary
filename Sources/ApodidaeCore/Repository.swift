@@ -87,8 +87,9 @@ public struct Repository: Decodable {
     }
 
     public var shortCliRepresentation: String {
+        let priv = isPrivate ? "private" : ""
         var output = """
-        - \(nameWithOwner.bold) \(latestVersion ?? "")
+        - \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
           \(url.absoluteString.italic)
         """
         if let description = self.description, !description.isEmpty {
@@ -102,8 +103,20 @@ public struct Repository: Decodable {
             .map { $0.name }
             .reversed()
             .joined(separator: ", ")
-        return """
-        \(nameWithOwner.bold) \(latestVersion ?? "")
+        let priv = isPrivate ? "private" : ""
+        let fork = "Fork of \(parent ?? "unknown")".yellow
+
+        var output = """
+        \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)\n
+        """
+
+        if isFork {
+            output += """
+            \(fork)\n
+            """
+        }
+
+        output += """
         \(url.absoluteString.underline)
         \(description ?? "No description available".italic)
 
@@ -113,6 +126,8 @@ public struct Repository: Decodable {
         Last updated: \(pushedAt.iso)
         Last versions: \(versions)
         """
+
+        return output
     }
 
     public enum DependencyRepresentationError: Error {
