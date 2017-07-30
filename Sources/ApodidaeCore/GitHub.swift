@@ -58,9 +58,9 @@ struct RepoQuery: GraphQLQuery {
     """
     let variables: [String: String]
     let header: [String: String]
-    init(query: String, authToken: String) {
+    init(query: String, accessToken: String) {
         self.variables = ["query": "\(query) language:Swift fork:true"]
-        self.header = ["Authorization": "Bearer \(authToken)"]
+        self.header = ["Authorization": "Bearer \(accessToken)"]
     }
 }
 
@@ -142,8 +142,8 @@ public enum GitHub {
         return Network.dataTask(request: request, isVerbose: isVerbose)
     }
 
-    public static func repos(with query: String, authToken: String, isVerbose: Bool) -> Promise<[Repository]> {
-        let repoQuery = RepoQuery(query: query, authToken: authToken)
+    public static func repos(with query: String, accessToken: String, isVerbose: Bool) -> Promise<[Repository]> {
+        let repoQuery = RepoQuery(query: query, accessToken: accessToken)
         return send(query: repoQuery, isVerbose: isVerbose).then { response in
             if let error = response.errors?.first {
                 throw error
@@ -162,8 +162,8 @@ public enum GitHub {
         }
     }
 
-    public static func firstRepo(with query: String, authToken: String, isVerbose: Bool) -> Promise<Repository> {
-        return repos(with: query, authToken: authToken, isVerbose: isVerbose).then { repos in
+    public static func firstRepo(with query: String, accessToken: String, isVerbose: Bool) -> Promise<Repository> {
+        return repos(with: query, accessToken: accessToken, isVerbose: isVerbose).then { repos in
             guard let first = repos.first else {
                 throw GitHub.Error.noPackages
             }
