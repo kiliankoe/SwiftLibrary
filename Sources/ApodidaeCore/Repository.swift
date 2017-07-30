@@ -46,6 +46,10 @@ public struct Repository: Decodable {
         case abbreviatedOid
     }
 
+    private enum ParentContainer: String, CodingKey {
+        case nameWithOwner
+    }
+
     public init(from decoder: Decoder) throws {
         let nodeContainer = try decoder.container(keyedBy: NodeKeys.self)
         let container = try nodeContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .node)
@@ -53,7 +57,10 @@ public struct Repository: Decodable {
         self.description = try container.decode(String?.self, forKey: .description)
         self.url = try container.decode(URL.self, forKey: .url)
         self.isFork = try container.decode(Bool.self, forKey: .isFork)
-        self.parent = try container.decode(String?.self, forKey: .parent)
+
+        let parentContainer = try? container.nestedContainer(keyedBy: ParentContainer.self, forKey: .parent)
+        self.parent = try parentContainer?.decode(String?.self, forKey: .nameWithOwner)
+
         self.isPrivate = try container.decode(Bool.self, forKey: .isPrivate)
         self.pushedAt = try container.decode(Date.self, forKey: .pushedAt)
         self.license = try container.decode(String?.self, forKey: .license)

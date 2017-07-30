@@ -58,7 +58,7 @@ struct RepoQuery: GraphQLQuery {
     let variables: [String: String]
     let header: [String: String]
     init(query: String, authToken: String) {
-        self.variables = ["query": "\(query) language:Swift"]
+        self.variables = ["query": "\(query) language:Swift fork:true"]
         self.header = ["Authorization": "Bearer \(authToken)"]
     }
 }
