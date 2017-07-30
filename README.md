@@ -6,9 +6,9 @@
 
 Apodidae is intended to be the quickest way to search for packages in the Swift ecosystem. By design, Swift pulls dependencies from any git repo, most of which are hosted on GitHub, but distributed amongst many thousands of users. This is fantastic to work with, but what it gains in ease of use, this method definitely lacks in discoverability.
 
-IBM has committed to building a fantastic catalog of packages aptly named [Package Catalog](https://packagecatalog.com). Whilst being a wonderful idea, a website is slow to use. Swift deserves a tool to find packages *swiftly*. Apodidae aims to be that tool.
+Luckily, GitHub offers a great API which can be utilizied to search for possible dependency candidates for your projects. Apodidae searches for repositories written in Swift that also include a package manifest and match your query thus making the search for packages a very *swift* matter.
 
-**tl;dr:** Apodidae is a command-line utility that serves as a client for packagecatalog.com.
+**tl;dr:** Apodidae is a command-line utility that searches for swift packages on GitHub and helps you add these to your `Package.swift`.
 
 
 
@@ -32,9 +32,12 @@ $ apo search rxswift
 - ReactiveX/RxSwift 3.6.1
   https://github.com/ReactiveX/RxSwift
   Reactive Programming in Swift
-- RxSwiftCommunity/Action 3.1.1
-  https://github.com/RxSwiftCommunity/Action
-  Abstracts actions to be performed in RxSwift
+- Moya/Moya 9.0.0-alpha.1
+  https://github.com/Moya/Moya
+  Network abstraction layer written in Swift.
+- devxoul/RxViewController 0.2.0
+  https://github.com/devxoul/RxViewController
+  RxSwift wrapper for UIViewController and NSViewController
 ...
 ```
 
@@ -46,53 +49,41 @@ ReactiveX/RxSwift 3.6.1
 https://github.com/ReactiveX/RxSwift
 Reactive Programming in Swift
 
-10155 stargazers
+10181 stargazers
 MIT License
-Supports Swift 3.0
 
-Last published: 14 hours ago
-Last Versions: 3.6.1, 3.6.0, 3.5.0, 3.4.1, 3.4.0@swift-3, 3.4.0, 3.3.1, 3.3.1@swift-3, 3.3.0, 3.3.0@swift-3, ...
-
-Dependencies:
-   None
+Last activity: 2017-07-29 14:30:05
+Last versions: 3.6.1, 3.6.0, 3.5.0, 3.4.1, 3.4.0
 ```
 
-You can also run `apo home ReactiveX/RxSwift` to directly open the homepage to a specific package in your browser. You may know this feature from homebrew.
+You can also run `apo home rxswift` to directly open the homepage to a specific package in your browser. You may know this feature from homebrew.
 
 #### Adding a package
 
 ```
 $ apo add rxswift
-The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.
+The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.
 
 .package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1")
 
-Please bear in mind that apodidae can not know if it is actually possible to include this package in your project.
-This is just some available package from packagecatalog.com including its last publicized version.
+Please bear in mind that apodidae can not be sure if it is actually possible to include this package in your project.
+It can only be safely assumed that this is a package written in Swift that contains a file named 'Package.swift'. It
+might also be an executable project instead of a library.
 ```
 
-Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion x` flag.
-
-#### Submitting a package to IBM's Package Catalog
-
-```
-$ apo submit https://github.com/ReactiveX/RxSwift
-Package successfully submitted to packagecatalog.com
-```
-
-If you want to submit the package in your current working directory you can just leave off the URL. Apodidae will try and read it from your git remote instead.
+Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion n` flag.
 
 
 
-## Known Issues
+## Questions or Feedback
 
-The basic functionality is there, but several parts of the very young codebase need some work. The project should also best be covered by a few more tests.
-
-Did you run into any issues or have questions? Please don't hesitate to [open an issue](https://github.com/kiliankoe/apodidae/issues/new).
+Did you run into any issues or have questions? Please don't hesitate to [open an issue](https://github.com/kiliankoe/apodidae/issues/new) or find me [@kiliankoe](https://twitter.com/kiliankoe) on Twitter.
 
 
 
 ## Why "apodidae"?
 
 The *Apodidae* or *swifts* are a family of highly aerial birds. This tool aims to help you find something within that "family". And it nicely abbreviates as a CLI to `apo`.
+
+Why the project? I was missing something akin to npm's search functionality for Swift. So here it is 🙃
 

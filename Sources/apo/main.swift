@@ -57,10 +57,29 @@ guard let command = Command(from: cli.unparsedArguments) else {
     exit(1)
 }
 
+try Config.initializeIfNecessary()
+let config: Config
+do {
+    config = try Config.read()
+} catch let error {
+    print("There was an error reading your config at \(Config.configFilePath.italic).")
+    print("You can either fix it manually or delete the file to have it recreated on the next run.")
+    print()
+    print("\(error)".red)
+    exit(1)
+}
+guard config.githubAccessToken != Config.tokenPlaceholder else {
+    print(Config.tokenWarning)
+    exit(0)
+}
+
 switch command {
 case .search(let query):
-    PackageCatalog.search(query: query, isVerbose: verbosity.wasSet).then { packages in
-        packages.forEach { print($0.cliRepresentation) }
+    GitHub.repos(with: query, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repos in
+        if repos.count == 0 {
+            print("No packages found.".yellow)
+        }
+        repos.forEach { print($0.shortCliRepresentation) }
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
@@ -68,8 +87,8 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
-        print(packageInfo.cliRepresentation)
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
+        print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
@@ -77,8 +96,8 @@ case .info(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
-        try shellOut(to: "open \(packageInfo.githubURL.absoluteString)")
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
+        try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
@@ -86,7 +105,7 @@ case .home(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, isVerbose: verbosity.wasSet).then { repo in
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
@@ -94,50 +113,21 @@ case .add(let package):
             swiftVersion = SwiftVersion.readFromLocalPackage()
         }
 
-        let possiblePackageString: String?
-        if let latestVersion = packageInfo.versions.first?.tag, latestVersion.lowercased() != "latest" {
-            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .version(latestVersion))
+        let packageString: String
+        if let latestVersion = repo.tags.last?.name {
+            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .version(latestVersion))
         } else {
-            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
+            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
         }
 
-        guard let packageString = possiblePackageString else {
-            print("Could not generate a package string with this requirement for Swift 3.".red) // Currently only possible in that case.
-            exit(1)
-        }
-
-        try! shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.")
+        try shellOut(to: "echo '\(packageString)' | pbcopy")
+        print("The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.")
         print()
         print(packageString.green)
         print()
-        print("Please bear in mind that apodidae can not know if it is actually possible to include this package in your project.")
-        print("This is just \("some".italic) available package from packagecatalog.com including its last publicized version.")
-        exit(0)
-    }.catch { error in
-        print(error.localizedDescription)
-        exit(1)
-    }
-    RunLoop.main.run(until: Date.distantFuture)
-case .submit(let package):
-    let packageURL: URL
-    if let package = package {
-        if let url = URL(string: package), (url.scheme ?? "").contains("http") {
-            packageURL = url
-        } else {
-            print("Packagecatalog.com expects a valid URL that's compatible with Swift Package Manager, e.g. 'https://www.github.com/foo/bar.git'.".yellow)
-            exit(1)
-        }
-    } else {
-        if let origin = try? shellOut(to: "git config remote.origin.url"), let url = URL(string: origin), (url.scheme ?? "").contains("http") {
-            packageURL = url
-        } else {
-            print("Could not read remote URL from the current directory (only works for http(s) schemes). Please specify it manually.".red)
-            exit(1)
-        }
-    }
-    PackageCatalog.submit(url: packageURL, isVerbose: verbosity.wasSet).then { _ in
-        print("Package successfully submitted to packagecatalog.com".green)
+        print("Please bear in mind that apodidae can not be sure if it is actually possible to include this package in your project.")
+        print("It can only be safely assumed that this is a package written in Swift that contains a file named 'Package.swift'. It")
+        print("might also be an executable project instead of a library.")
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
