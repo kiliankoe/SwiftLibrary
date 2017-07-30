@@ -101,8 +101,12 @@ public struct SearchResponse: Decodable {
     }
 }
 
-public struct ErrorResponse: Decodable {
+public struct ErrorResponse: Decodable, Error, LocalizedError {
     let message: String
+
+    public var errorDescription: String? {
+        return "GitHub API Error: \(message)".red
+    }
 }
 
 public enum GitHub {

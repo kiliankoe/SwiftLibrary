@@ -62,8 +62,10 @@ let githubAuthToken = ProcessInfo.processInfo.environment["GITHUB_AUTHKEY"]!
 switch command {
 case .search(let query):
     GitHub.repos(with: query, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
-        // TODO: Handle error
         // TODO: Output some more response output if verbose, e.g. number of results, remaining API calls
+        if let error = response.errors?.first {
+            throw error
+        }
         guard let repos = response.data?.repositories else {
             print("No packages found".yellow)
             exit(0)
@@ -77,6 +79,9 @@ case .search(let query):
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
     GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        if let error = response.errors?.first {
+            throw error
+        }
         guard let repo = response.data?.repositories.first else {
             print("No such package found".yellow)
             exit(0)
@@ -90,6 +95,9 @@ case .info(let package):
     RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
     GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        if let error = response.errors?.first {
+            throw error
+        }
         guard let repo = response.data?.repositories.first else {
             print("No such package found".yellow)
             exit(0)
@@ -103,6 +111,9 @@ case .home(let package):
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
     GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        if let error = response.errors?.first {
+            throw error
+        }
         guard let repo = response.data?.repositories.first else {
             print("No such package found".yellow)
             exit(0)
