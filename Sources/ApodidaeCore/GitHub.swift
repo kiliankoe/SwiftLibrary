@@ -65,7 +65,7 @@ struct RepoQuery: GraphQLQuery {
 
 public struct RepoResponse: Decodable {
     public let data: SearchResponse?
-    public let error: [ErrorResponse]?
+    public let errors: [ErrorResponse]?
 }
 
 public struct SearchResponse: Decodable {
