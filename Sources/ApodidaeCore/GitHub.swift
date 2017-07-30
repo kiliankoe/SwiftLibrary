@@ -50,6 +50,7 @@ struct RepoQuery: GraphQLQuery {
         }
       }
       rateLimit {
+        cost
         remaining
         resetAt
       }
@@ -71,6 +72,7 @@ public struct RepoResponse: Decodable {
 public struct SearchResponse: Decodable {
     public let repositoryCount: Int
     public let repositories: [Repository]
+    public let queryCost: Int
     public let rateLimitRemaining: Int
     public let rateLimitResetAt: Date
 
@@ -85,6 +87,7 @@ public struct SearchResponse: Decodable {
     }
 
     private enum RateLimitKeys: String, CodingKey {
+        case cost
         case remaining
         case resetAt
     }
@@ -96,6 +99,7 @@ public struct SearchResponse: Decodable {
         let repositories = try container.decode([Repository].self, forKey: .repositories)
         self.repositories = repositories.filter { $0.hasPackageManifest }
         let rateLimitContainer = try searchContainer.nestedContainer(keyedBy: RateLimitKeys.self, forKey: .rateLimit)
+        self.queryCost = try rateLimitContainer.decode(Int.self, forKey: .cost)
         self.rateLimitRemaining = try rateLimitContainer.decode(Int.self, forKey: .remaining)
         self.rateLimitResetAt = try rateLimitContainer.decode(Date.self, forKey: .resetAt)
     }
@@ -141,13 +145,12 @@ public enum GitHub {
     public static func repos(with query: String, authToken: String, isVerbose: Bool) -> Promise<[Repository]> {
         let repoQuery = RepoQuery(query: query, authToken: authToken)
         return send(query: repoQuery, isVerbose: isVerbose).then { response in
-            // This is just for some pre-processing for errors and verbosity
             if let error = response.errors?.first {
                 throw error
             }
             if isVerbose {
                 print("Found \(response.data?.repositoryCount ?? 0) possible repositories on GitHub, \(response.data?.repositories.count ?? 0) of which seem to include a Package.swift.")
-                print("You have \(response.data?.rateLimitRemaining ?? 0)/5000 API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
+                print("You have ~\((response.data?.rateLimitRemaining ?? 0)/(response.data?.queryCost ?? 1))/\(5000 / (response.data?.queryCost ?? 1)) API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
                 print()
             }
 
