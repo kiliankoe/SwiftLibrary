@@ -21,7 +21,7 @@ let package = Package(
             name: "ApodidaeCore",
             dependencies: ["PromiseKit", "Files", "Rainbow"]),
         .target(
-            name: "apo",
+            name: "swift-catalog",
             dependencies: ["ApodidaeCore", "CommandLine", "ShellOut"]),
         .testTarget(
             name: "ApodidaeTests",
