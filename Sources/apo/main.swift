@@ -135,29 +135,5 @@ case .add(let package):
         exit(1)
     }
     RunLoop.main.run(until: Date.distantFuture)
-case .submit(let package):
-    let packageURL: URL
-    if let package = package {
-        if let url = URL(string: package), (url.scheme ?? "").contains("http") {
-            packageURL = url
-        } else {
-            print("Packagecatalog.com expects a valid URL that's compatible with Swift Package Manager, e.g. 'https://www.github.com/foo/bar.git'.".yellow)
-            exit(1)
-        }
-    } else {
-        if let origin = try? shellOut(to: "git config remote.origin.url"), let url = URL(string: origin), (url.scheme ?? "").contains("http") {
-            packageURL = url
-        } else {
-            print("Could not read remote URL from the current directory (only works for http(s) schemes). Please specify it manually.".red)
-            exit(1)
-        }
-    }
-    PackageCatalog.submit(url: packageURL, isVerbose: verbosity.wasSet).then { _ in
-        print("Package successfully submitted to packagecatalog.com".green)
-        exit(0)
-    }.catch { error in
-        print(error.localizedDescription)
-        exit(1)
-    }
     RunLoop.main.run(until: Date.distantFuture)
 }

@@ -12,8 +12,6 @@ class CommandTests: XCTestCase {
             ["h", "bar"],
             ["add", "baz"],
             ["a", "foo"],
-            ["submit"],
-            ["submit", "foobar"]
         ]
         for command in validCommands {
             guard let _ = Command(from: command) else {
