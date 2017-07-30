@@ -19,6 +19,8 @@ $ brew tap kiliankoe/formulae
 $ brew install apodidae
 ```
 
+Apodidae conveniently installs as `swift-catalog` which enables you to just call it as if it were a subcommand on swift itself as `swift catalog ...`. See the usage examples below for more.
+
 
 
 ## Usage
@@ -28,7 +30,7 @@ Apodidae exposes a handful of commands. Their use is probably best shown with a 
 #### Searching for packages
 
 ```
-$ apo search rxswift
+$ swift catalog search rxswift
 - ReactiveX/RxSwift 3.6.1
   https://github.com/ReactiveX/RxSwift
   Reactive Programming in Swift
@@ -44,7 +46,7 @@ $ apo search rxswift
 #### Getting info on a package
 
 ```
-$ apo info rxswift
+$ swift catalog info rxswift
 ReactiveX/RxSwift 3.6.1
 https://github.com/ReactiveX/RxSwift
 Reactive Programming in Swift
@@ -61,7 +63,7 @@ You can also run `apo home rxswift` to directly open the homepage to a specific 
 #### Adding a package
 
 ```
-$ apo add rxswift
+$ swift catalog add rxswift
 The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.
 
 .package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1")
@@ -83,7 +85,7 @@ Did you run into any issues or have questions? Please don't hesitate to [open an
 
 ## Why "apodidae"?
 
-The *Apodidae* or *swifts* are a family of highly aerial birds. This tool aims to help you find something within that "family". And it nicely abbreviates as a CLI to `apo`.
+The *Apodidae* or *swifts* are a family of highly aerial birds. This tool aims to help you find something within that "family".
 
 Why the project? I was missing something akin to npm's search functionality for Swift. So here it is 🙃
 
