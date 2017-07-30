@@ -149,7 +149,7 @@ public enum GitHub {
                 throw error
             }
             if isVerbose {
-                print("Found \(response.data?.repositoryCount ?? 0) possible repositories on GitHub, \(response.data?.repositories.count ?? 0) of which seem to include a Package.swift.")
+                print("Found \(response.data?.repositoryCount ?? 0) possible repositories on GitHub, \(response.data?.repositories.count ?? 0) out of the top 100 of which seem to include a Package.swift.")
                 print("You have ~\((response.data?.rateLimitRemaining ?? 0)/(response.data?.queryCost ?? 1))/\(5000 / (response.data?.queryCost ?? 1)) API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
                 print()
             }
