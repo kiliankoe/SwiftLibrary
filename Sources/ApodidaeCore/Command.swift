@@ -35,7 +35,7 @@ public enum Command {
             guard strings.count >= 2 else { return nil }
             let package = strings.dropFirst().joined(separator: " ")
             self = .home(package)
-        case "add", "a":
+        case "add", "a", "+":
             guard strings.count >= 2 else { return nil }
             let package = strings.dropFirst().joined(separator: " ")
             self = .add(package)
