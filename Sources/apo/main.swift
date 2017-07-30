@@ -102,7 +102,11 @@ case .home(let package):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
+    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        guard let repo = response.data?.repositories.first else {
+            print("No such package found".yellow)
+            exit(0)
+        }
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
@@ -110,30 +114,25 @@ case .add(let package):
             swiftVersion = SwiftVersion.readFromLocalPackage()
         }
 
-        let possiblePackageString: String?
-        if let latestVersion = packageInfo.versions.first?.tag, latestVersion.lowercased() != "latest" {
-            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .version(latestVersion))
+        let packageString: String
+        if let latestVersion = repo.tags.last?.name {
+            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .version(latestVersion))
         } else {
-            possiblePackageString = packageInfo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
+            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
         }
 
-        guard let packageString = possiblePackageString else {
-            print("Could not generate a package string with this requirement for Swift 3.".red) // Currently only possible in that case.
-            exit(1)
-        }
-
-        try! shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard. Go ahead and paste it into your Package.swift's dependencies.")
+        try shellOut(to: "echo '\(packageString)' | pbcopy")
+        print("The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.")
         print()
         print(packageString.green)
         print()
-        print("Please bear in mind that apodidae can not know if it is actually possible to include this package in your project.")
-        print("This is just \("some".italic) available package from packagecatalog.com including its last publicized version.")
+        print("Please bear in mind that apodidae can not be sure if it is actually possible to include this package in your project.")
+        print("It can only be safely assumed that this is a package written in Swift that contains a file named 'Package.swift'. It")
+        print("might also be an executable project instead of a library.")
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
         exit(1)
     }
-    RunLoop.main.run(until: Date.distantFuture)
     RunLoop.main.run(until: Date.distantFuture)
 }

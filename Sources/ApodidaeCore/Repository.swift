@@ -108,8 +108,25 @@ public struct Repository: Decodable {
         """
     }
 
+    public enum DependencyRepresentationError: Error {
+        case notRepresentableWithSwift3(Requirement)
+    }
+
+    public func dependencyRepresentation(for swiftVersion: SwiftVersion, requirement: Requirement) throws -> String {
+        switch swiftVersion {
+        case .v3:
+            guard case .version(let version) = requirement else {
+                throw DependencyRepresentationError.notRepresentableWithSwift3(requirement)
+            }
+            let versionComponents = version.components(separatedBy: ".")
+            return ".Package(url: \"\(self.url)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1]))"
+        case .v4:
+            return ".package(url: \"\(self.url)\", \(requirement.packageString))"
+        }
+    }
+
     public struct Tag: Decodable {
-        let name: String
+        public let name: String
 
         private enum NodeKeys: String, CodingKey {
             case node
@@ -123,6 +140,15 @@ public struct Repository: Decodable {
             let nodeContainer = try decoder.container(keyedBy: NodeKeys.self)
             let container = try nodeContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .node)
             self.name = try container.decode(String.self, forKey: .name)
+        }
+    }
+}
+
+extension Repository.DependencyRepresentationError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .notRepresentableWithSwift3(let requirement):
+            return "The requirement '\(requirement)' is not possible to represent in Swift 3 package manifests.".yellow
         }
     }
 }
