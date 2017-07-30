@@ -122,7 +122,7 @@ case .add(let package):
         }
 
         try shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.")
+        print("The following has been copied to your clipboard for convenience, just paste it into your Package.swift.")
         print()
         print(packageString.green)
         print()
