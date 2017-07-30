@@ -88,10 +88,14 @@ public struct Repository: Decodable {
 
     public var shortCliRepresentation: String {
         let priv = isPrivate ? "private" : ""
+        let fork = "Fork of \(parent ?? "unknown")".yellow
         var output = """
         - \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
           \(url.absoluteString.italic)
         """
+        if isFork {
+            output += "\n  \(fork)"
+        }
         if let description = self.description, !description.isEmpty {
             output += "\n  \(description)"
         }
