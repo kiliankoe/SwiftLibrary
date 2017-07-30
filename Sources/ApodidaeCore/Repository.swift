@@ -91,7 +91,10 @@ public struct Repository: Decodable {
     }
 
     public var longCliRepresentation: String {
-        let versions = self.tags.map { $0.name }.joined(separator: ", ")
+        let versions = self.tags
+            .map { $0.name }
+            .reversed()
+            .joined(separator: ", ")
         return """
         \(nameWithOwner.bold) \(latestVersion ?? "")
         \(url.absoluteString.underline)

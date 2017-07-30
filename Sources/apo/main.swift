@@ -76,8 +76,12 @@ case .search(let query):
     }
     RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
-    PackageCatalog.getInfoAfterSearch(for: package, isVerbose: verbosity.wasSet).then { packageInfo in
-        print(packageInfo.cliRepresentation)
+    GitHub.repos(with: package, authToken: githubAuthToken, isVerbose: verbosity.wasSet).then { response in
+        guard let repo = response.data?.repositories.first else {
+            print("No such package found".yellow)
+            exit(0)
+        }
+        print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
