@@ -22,7 +22,7 @@ let help = BoolOption(shortFlag: "h", longFlag: "help", helpMessage: "Display th
 let version = BoolOption(longFlag: "version", helpMessage: "Output the version of apodidae.")
 let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages.")
 
-let swiftVersionFlag = IntOption(longFlag: "swiftversion", helpMessage: "Manually specify a swift version for the generated dependency string on `apo add`.")
+let swiftVersionFlag = IntOption(longFlag: "swiftversion", helpMessage: "Manually specify a swift version for the generated dependency string on `swift catalog add`.")
 
 cli.addOptions(help, version, verbosity, swiftVersionFlag)
 
