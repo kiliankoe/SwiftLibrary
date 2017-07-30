@@ -124,8 +124,10 @@ public struct Repository: Decodable {
         output += """
         \(description ?? "No description available".italic)
 
-        \(stargazers) stargazers
         \(license ?? "No license found")
+        
+        \(stargazers) stargazers
+        \(openIssues) open issues
 
         Last activity: \(pushedAt.iso)
         Last versions: \(versions)
