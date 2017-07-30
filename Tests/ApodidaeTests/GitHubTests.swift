@@ -211,7 +211,7 @@ class GitHubTests: XCTestCase {
         }
         let response = try! decoder.decode(RepoResponse.self, from: json)
 
-        XCTAssertEqual(response.data?.repositories.count, 6)
+        XCTAssertEqual(response.data?.repositories.count, 3)
         XCTAssertEqual(response.data?.repositories[0].nameWithOwner, "kiliankoe/DVB")
         XCTAssertEqual(response.data?.repositories[0].tags.first?.name, "1.1.0")
         XCTAssertTrue(response.data?.repositories[0].hasPackageManifest ?? false)
