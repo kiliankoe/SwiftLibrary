@@ -158,7 +158,7 @@ public enum GitHub {
                 print()
             }
 
-            guard let repos = response.data?.repositories else {
+            guard let repos = response.data?.repositories, repos.count > 0 else {
                 throw GitHub.Error.noPackages
             }
 
