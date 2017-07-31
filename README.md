@@ -1,4 +1,4 @@
-![header](https://user-images.githubusercontent.com/2625584/28693159-c1ae88fa-7323-11e7-8ce3-1980fdf2a925.png)
+![header](https://user-images.githubusercontent.com/2625584/28789219-b9ffed5c-7624-11e7-8959-792171e75deb.png)
 
 
 [![Travis](https://img.shields.io/travis/kiliankoe/apodidae.svg?style=flat-square)](https://travis-ci.org/kiliankoe/apodidae/)
