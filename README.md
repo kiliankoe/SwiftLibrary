@@ -25,7 +25,7 @@ Apodidae conveniently installs as `swift-catalog` which enables you to just call
 
 ## Usage
 
-Apodidae exposes a handful of commands. Their use is probably best shown with a few examples. [Here's a link](https://asciinema.org/a/130908) to asciinema for a short usage demo recording if you prefer that.
+Apodidae exposes a handful of commands. Their use is probably best shown with a few examples. [Here's a link](https://asciinema.org/a/cArPp6g286BTTenlpwWcnwC5P) to asciinema for a short usage demo recording if you prefer that.
 
 #### Searching for packages
 
