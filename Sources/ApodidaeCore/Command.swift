@@ -43,7 +43,7 @@ public enum Command {
 
             let queryComponents = query
                 .trimmingCharacters(in: .whitespaces)
-                .split(separator: "@")
+                .split(separator: "@", maxSplits: 1)
 
             guard
                 queryComponents.count == 2,
@@ -58,7 +58,7 @@ public enum Command {
             }
 
             // Continuing here if the add command includes a *specific* named requirement, e.g. @tag:0.1.0 or @branch:master
-            let specificComponents = requirement.split(separator: ":")
+            let specificComponents = requirement.split(separator: ":", maxSplits: 1)
             guard
                 let specificRequirementName = specificComponents.first,
                 let specificRequirementValue = specificComponents.last
