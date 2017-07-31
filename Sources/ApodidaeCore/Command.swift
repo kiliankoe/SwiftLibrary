@@ -46,9 +46,9 @@ public enum Command {
                 .split(separator: "@")
 
             guard
+                queryComponents.count == 2,
                 let packageName = queryComponents.first,
-                let requirement = queryComponents.last,
-                packageName != requirement
+                let requirement = queryComponents.last
             else { return nil }
 
             guard requirement.contains(":") else {
