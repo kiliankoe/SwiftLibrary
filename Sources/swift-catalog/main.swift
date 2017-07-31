@@ -83,24 +83,24 @@ case .search(let query):
         print(error.localizedDescription)
         exit(1)
     }
-case .info(let package):
-    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+case .info(let input):
+    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
         exit(1)
     }
-case .home(let package):
-    GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+case .home(let input):
+    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
         print(error.localizedDescription)
         exit(1)
     }
-case .add(let package):
-    GitHub.firstRepo(with: package.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+case .add(let input):
+    GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
@@ -109,7 +109,7 @@ case .add(let package):
         }
 
         let packageString: String
-        if let requirement = package.requirement {
+        if let requirement = input.requirement {
             packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
         } else {
             if let latestVersion = repo.tags.last?.name {
