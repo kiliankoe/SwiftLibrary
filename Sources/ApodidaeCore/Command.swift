@@ -46,19 +46,19 @@ public enum Command {
                 .split(separator: "@")
 
             guard
-                let name = queryComponents.first,
-                let requirementStr = queryComponents.last,
-                name != requirementStr
+                let packageName = queryComponents.first,
+                let requirement = queryComponents.last,
+                packageName != requirement
             else { return nil }
 
-            guard requirementStr.contains(":") else {
+            guard requirement.contains(":") else {
                 // no specifically named requirement means it's a tag
-                self = .add(package: String(name), requirement: .tag(String(requirementStr)))
+                self = .add(package: String(packageName), requirement: .tag(String(requirement)))
                 return
             }
 
             // Continuing here if the add command includes a *specific* named requirement, e.g. @tag:0.1.0 or @branch:master
-            let specificComponents = requirementStr.split(separator: ":")
+            let specificComponents = requirement.split(separator: ":")
             guard
                 let specificRequirementName = specificComponents.first,
                 let specificRequirementValue = specificComponents.last
@@ -66,11 +66,11 @@ public enum Command {
 
             switch specificRequirementName {
             case "tag", "version":
-                self = .add(package: String(name), requirement: .tag(String(specificRequirementValue)))
+                self = .add(package: String(packageName), requirement: .tag(String(specificRequirementValue)))
             case "branch":
-                self = .add(package: String(name), requirement: .branch(String(specificRequirementValue)))
+                self = .add(package: String(packageName), requirement: .branch(String(specificRequirementValue)))
             case "revision":
-                self = .add(package: String(name), requirement: .revision(String(specificRequirementValue)))
+                self = .add(package: String(packageName), requirement: .revision(String(specificRequirementValue)))
             default: return nil // It would probably make sense to start returning actual errors at some point...
             }
         default:
