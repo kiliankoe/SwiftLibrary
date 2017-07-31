@@ -46,6 +46,7 @@ class CommandTests: XCTestCase {
         XCTAssertEqual(Command(from: ["add", "foobar@version:1.1.0"]), Command.add(package: "foobar", requirement: .tag("1.1.0")))
         XCTAssertEqual(Command(from: ["add", "foobar@branch:master"]), Command.add(package: "foobar", requirement: .branch("master")))
         XCTAssertEqual(Command(from: ["add", "foobar@revision:barfoo"]), Command.add(package: "foobar", requirement: .revision("barfoo")))
+        XCTAssertEqual(Command(from: ["add", "foobar@commit:barfoo"]), Command.add(package: "foobar", requirement: .revision("barfoo")))
 
         XCTAssertNil(Command(from: ["add", "foobar@"]))
         XCTAssertNil(Command(from: ["add", "foobar@foo:bar"]))

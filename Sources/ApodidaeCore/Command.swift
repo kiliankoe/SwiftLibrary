@@ -69,7 +69,7 @@ public enum Command {
                 self = .add(package: String(packageName), requirement: .tag(String(specificRequirementValue)))
             case "branch":
                 self = .add(package: String(packageName), requirement: .branch(String(specificRequirementValue)))
-            case "revision":
+            case "revision", "commit":
                 self = .add(package: String(packageName), requirement: .revision(String(specificRequirementValue)))
             default: return nil // It would probably make sense to start returning actual errors at some point...
             }
