@@ -52,7 +52,7 @@ public enum Command {
             else { return nil }
 
             guard requirementStr.contains(":") else {
-                // no specifically named requirement means it's a version
+                // no specifically named requirement means it's a tag
                 self = .add(package: String(name), requirement: .tag(String(requirementStr)))
                 return
             }
@@ -71,7 +71,7 @@ public enum Command {
                 self = .add(package: String(name), requirement: .branch(String(specificRequirementValue)))
             case "revision":
                 self = .add(package: String(name), requirement: .revision(String(specificRequirementValue)))
-            default: return nil // It would probably make sense at some point to start returning actual errors...
+            default: return nil // It would probably make sense to start returning actual errors at some point...
             }
         default:
             return nil
