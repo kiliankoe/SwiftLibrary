@@ -44,3 +44,16 @@ public enum Command {
         }
     }
 }
+
+extension Command: Equatable {
+    public static func ==(lhs: Command, rhs: Command) -> Bool {
+        switch (lhs, rhs) {
+        case (.search(let lhss), .search(let rhss)): return lhss == rhss
+        case (.info(let lhsi), .info(let rhsi)): return lhsi == rhsi
+        case (.home(let lhsh), .home(let rhsh)): return lhsh == rhsh
+        case (.add(let lhsp, let lhsr), .add(let rhsp, let rhsr)):
+            return lhsp == rhsp && lhsr == rhsr
+        default: return false
+        }
+    }
+}
