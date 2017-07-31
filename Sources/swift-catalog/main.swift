@@ -86,7 +86,6 @@ case .search(let query):
         print(error.localizedDescription)
         exit(1)
     }
-    RunLoop.main.run(until: Date.distantFuture)
 case .info(let package):
     GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         print(repo.longCliRepresentation)
@@ -95,7 +94,6 @@ case .info(let package):
         print(error.localizedDescription)
         exit(1)
     }
-    RunLoop.main.run(until: Date.distantFuture)
 case .home(let package):
     GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         try shellOut(to: "open \(repo.url.absoluteString)")
@@ -104,7 +102,6 @@ case .home(let package):
         print(error.localizedDescription)
         exit(1)
     }
-    RunLoop.main.run(until: Date.distantFuture)
 case .add(let package):
     GitHub.firstRepo(with: package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
         let swiftVersion: SwiftVersion
@@ -134,5 +131,5 @@ case .add(let package):
         print(error.localizedDescription)
         exit(1)
     }
-    RunLoop.main.run(until: Date.distantFuture)
 }
+RunLoop.main.run(until: Date.distantFuture)
