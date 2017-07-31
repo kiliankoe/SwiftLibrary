@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Don't forget to tag the last commit before running this."
+echo "public let APODIDAE_VERSION = \""$(git describe)"\"" > Sources/ApodidaeCore/Version.swift
+swift build -c release
+cd .build/release
+tar -zcf apodidae.tar.gz swift-catalog
+shasum -a 256 apodidae.tar.gz
+open .
