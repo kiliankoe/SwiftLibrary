@@ -143,7 +143,7 @@ public struct Repository: Decodable {
     public func dependencyRepresentation(for swiftVersion: SwiftVersion, requirement: Requirement) throws -> String {
         switch swiftVersion {
         case .v3:
-            guard case .version(let version) = requirement else {
+            guard case .tag(let version) = requirement else {
                 throw DependencyRepresentationError.notRepresentableWithSwift3(requirement)
             }
             let versionComponents = version.components(separatedBy: ".")

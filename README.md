@@ -75,6 +75,17 @@ might also be an executable project instead of a library.
 
 Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion n` flag.
 
+It's also possible to add a specific version or other requirement. All you have to do is add `@requirement` to the end of the package. This syntax may feel familiar if you've used npm. The following all work.
+
+````shell
+$ swift catalog add rxswift@3.6.1
+$ swift catalog add rxswift@tag:3.6.1 # same as above
+$ swift catalog add rxswift@version:3.6.1 # same as above
+$ swift catalog add rxswift@branch:master
+$ swift catalog add rxswift@revision:80de962
+$ swift catalog add rxswift@commit:80de962 # same as above
+````
+
 
 
 ## Questions or Feedback
