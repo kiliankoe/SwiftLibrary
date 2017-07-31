@@ -23,13 +23,13 @@ public enum Command {
     public init?(from strings: [String]) {
         guard
             strings.count > 0,
-            let first = strings.first
+            let command = strings.first
         else { return nil }
 
         let query = strings[1...].joined(separator: " ")
         guard !query.isEmpty else { return nil }
 
-        switch first.lowercased() {
+        switch command.lowercased() {
         case "search", "s": self = .search(query)
         case "info", "i": self = .info(query)
         case "home", "h": self = .home(query)
