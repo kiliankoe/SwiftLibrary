@@ -84,6 +84,7 @@ case .search(let query):
         let packageQuantityStr = repos.count > 1 ? "packages" : "package"
         spinner.succeed(text: "Found \(repos.count) \(packageQuantityStr)")
         print()
+        repos.forEach { print($0.shortCliRepresentation); usleep(15_000) }
         exit(0)
     }.catch { error in
         spinner.fail(text: error.localizedDescription)
