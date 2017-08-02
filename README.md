@@ -94,7 +94,16 @@ Did you run into any issues or have questions? Please don't hesitate to [open an
 
 
 
-## Why "apodidae"?
+## FAQ
+
+###  Why don't you use PackageCatalog.com, SwiftModules.com, Libraries.io, ...?
+
+These pages are a great idea and are well implemented, but they all use GitHub as a datasource and have to continually refresh their own databases by pulling new data from GitHub periodically. By design, they can't always be 100% up to date and more importantly, they can't automatically know about new packages when they're published. They rely on users manually adding packages or continually searching for new repos themselves.
+
+By having apodidae search on GitHub directly we can circumvent those issues and are still able to find all packages including their metadata.
+
+
+### Why "apodidae"?
 
 The *Apodidae* or *swifts* are a family of highly aerial birds. This tool aims to help you find something within that "family".
 
