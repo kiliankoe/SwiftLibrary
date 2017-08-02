@@ -3,6 +3,7 @@ import ApodidaeCore
 import CommandLineKit
 import Rainbow
 import ShellOut
+import CLISpinner
 
 let cli = CommandLine()
 
@@ -74,33 +75,42 @@ guard config.githubAccessToken != Config.tokenPlaceholder else {
     exit(0)
 }
 
+let spinner = Spinner(pattern: .dots, text: "Searching on GitHub...", color: .lightCyan)
+spinner.start()
+
 switch command {
 case .search(let query):
     GitHub.repos(with: query, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repos in
-        repos.forEach { print($0.shortCliRepresentation) }
+        let packageQuantityStr = repos.count > 1 ? "packages" : "package"
+        spinner.succeed(text: "Found \(repos.count) \(packageQuantityStr)")
+        print()
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .info(let input):
     GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+        spinner.stop(text: "", symbol: " ")
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .home(let input):
     GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+        spinner.stop(text: "", symbol: " ")
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .add(let input):
     GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+        spinner.stop(text: "", symbol: " ")
+
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
@@ -129,7 +139,7 @@ case .add(let input):
         print("might also be an executable project instead of a library.")
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 }
