@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "CLISpinner",
+        "repositoryURL": "https://github.com/kiliankoe/CLISpinner",
+        "state": {
+          "branch": null,
+          "revision": "ea040b7876464bbb7bb02268c3274036f2deb014",
+          "version": "0.3.0"
+        }
+      },
+      {
         "package": "CommandLine",
         "repositoryURL": "https://github.com/jatoben/CommandLine",
         "state": {
