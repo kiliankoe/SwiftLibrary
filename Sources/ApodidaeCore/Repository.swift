@@ -176,7 +176,7 @@ extension Repository.DependencyRepresentationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .notRepresentableWithSwift3(let requirement):
-            return "The requirement '\(requirement)' is not possible to represent in Swift 3 package manifests.".yellow
+            return "The requirement '\(requirement)' is not possible to represent in Swift 3 package manifests."
         }
     }
 }

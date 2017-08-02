@@ -113,7 +113,7 @@ public struct ErrorResponse: Decodable, Error, LocalizedError {
     let message: String
 
     public var errorDescription: String? {
-        return "GitHub API Error: \(message)".red
+        return "GitHub API Error: \(message)"
     }
 }
 
@@ -123,7 +123,7 @@ public enum GitHub {
 
         public var errorDescription: String? {
             switch self {
-            case .noPackages: return "No packages found.".yellow
+            case .noPackages: return "No packages found."
             }
         }
     }
