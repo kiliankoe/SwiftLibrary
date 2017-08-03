@@ -155,13 +155,8 @@ case .add(let input):
         }
 
         try shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard for convenience, just paste it into your Package.swift.")
-        print()
-        print(packageString.green)
-        print()
-        print("Please bear in mind that apodidae can not be sure if it is actually possible to include this package in your project.")
-        print("It can only be safely assumed that this is a package written in Swift that contains a file named 'Package.swift'. It")
-        print("might also be an executable project instead of a library.")
+        print("The following has been copied to your clipboard for convenience, just paste it into your package manifest.")
+        print(packageString.lightCyan)
         exit(0)
     }.catch { error in
         spinner.fail(text: error.localizedDescription)
