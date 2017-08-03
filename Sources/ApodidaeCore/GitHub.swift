@@ -113,7 +113,7 @@ public struct ErrorResponse: Decodable, Error, LocalizedError {
     let message: String
 
     public var errorDescription: String? {
-        return "GitHub API Error: \(message)".red
+        return "GitHub API Error: \(message)"
     }
 }
 
@@ -123,14 +123,38 @@ public enum GitHub {
 
         public var errorDescription: String? {
             switch self {
-            case .noPackages: return "No packages found.".yellow
+            case .noPackages: return "No packages found."
             }
+        }
+    }
+
+    public struct MetaInfo {
+        let totalRepositoryCount: Int
+        let swiftPackageCount: Int
+        let rateLimitRemaining: Int
+        let rateLimitResetAt: Date
+        let queryCost: Int
+
+        init(from response: SearchResponse) {
+            self.totalRepositoryCount = response.repositoryCount
+            self.swiftPackageCount = response.repositories.count
+            self.rateLimitRemaining = response.rateLimitRemaining
+            self.rateLimitResetAt = response.rateLimitResetAt
+            self.queryCost = response.queryCost
+        }
+
+        public var cliRepresentation: String {
+            return """
+            Found \(totalRepositoryCount) possible repositories on GitHub, \(swiftPackageCount) out of the top 100 of which seem to include a Package.swift.
+            You have ~\(rateLimitRemaining/queryCost)/\(5000 / queryCost) API requests remaining, which will be reset on \(rateLimitResetAt.iso).
+
+            """
         }
     }
 
     static let apiBaseURL = URL(string: "https://api.github.com/graphql")!
 
-    static func send<T: GraphQLQuery>(query: T, isVerbose: Bool) -> Promise<T.Response> {
+    static func send<T: GraphQLQuery>(query: T) -> Promise<T.Response> {
         var request = URLRequest(url: apiBaseURL)
         request.httpMethod = "POST"
         query.header.forEach { (key, value) in
@@ -143,35 +167,36 @@ public enum GitHub {
             "query": query.query,
             "variables": String(data: variables, encoding: .utf8) ?? "" // umm...
         ].asJSON
-        return Network.dataTask(request: request, isVerbose: isVerbose)
+        return Network.dataTask(request: request)
     }
 
-    public static func repos(with query: String, accessToken: String, searchForks: Bool, isVerbose: Bool) -> Promise<[Repository]> {
+    public static func repos(with query: String, accessToken: String, searchForks: Bool) -> Promise<(repos: [Repository], meta: MetaInfo)> {
         let repoQuery = RepoQuery(query: query, accessToken: accessToken, searchForks: searchForks)
-        return send(query: repoQuery, isVerbose: isVerbose).then { response in
+        return send(query: repoQuery).then { response in
             if let error = response.errors?.first {
                 throw error
             }
-            if isVerbose {
-                print("Found \(response.data?.repositoryCount ?? 0) possible repositories on GitHub, \(response.data?.repositories.count ?? 0) out of the top 100 of which seem to include a Package.swift.")
-                print("You have ~\((response.data?.rateLimitRemaining ?? 0)/(response.data?.queryCost ?? 1))/\(5000 / (response.data?.queryCost ?? 1)) API requests remaining, which will be reset on \(response.data?.rateLimitResetAt.iso ?? "?").")
-                print()
-            }
 
-            guard let repos = response.data?.repositories, repos.count > 0 else {
+            guard let searchResponse = response.data, searchResponse.repositories.count > 0 else {
                 throw GitHub.Error.noPackages
             }
 
-            return Promise(value: repos)
+            let meta = MetaInfo(from: searchResponse)
+            return Promise(value: (searchResponse.repositories, meta))
         }
     }
 
-    public static func firstRepo(with query: String, accessToken: String, searchForks: Bool, isVerbose: Bool) -> Promise<Repository> {
-        return repos(with: query, accessToken: accessToken, searchForks: searchForks, isVerbose: isVerbose).then { repos in
-            guard let first = repos.first else {
+    public static func firstRepo(with query: String, accessToken: String, searchForks: Bool) -> Promise<(repo: Repository, meta: MetaInfo)> {
+        var searchForks = searchForks
+        if query.contains("/") {
+            // If a fully qualified identifier is given the user shouldn't have to set the forks flag
+            searchForks = true
+        }
+        return repos(with: query, accessToken: accessToken, searchForks: searchForks).then { response in
+            guard let first = response.repos.first else {
                 throw GitHub.Error.noPackages
             }
-            return Promise(value: first)
+            return Promise(value: (first, response.meta))
         }
     }
 }

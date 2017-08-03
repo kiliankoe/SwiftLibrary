@@ -3,6 +3,8 @@ import ApodidaeCore
 import CommandLineKit
 import Rainbow
 import ShellOut
+import CLISpinner
+import Signals
 
 let cli = CommandLine()
 
@@ -74,33 +76,66 @@ guard config.githubAccessToken != Config.tokenPlaceholder else {
     exit(0)
 }
 
+let spinner = Spinner(pattern: .dots, text: "Searching on GitHub...", color: .lightCyan)
+spinner.start()
+
+Signals.trap(signal: .int) { signal in
+    spinner.unhideCursor()
+    exit(1)
+}
+
 switch command {
 case .search(let query):
-    GitHub.repos(with: query, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repos in
-        repos.forEach { print($0.shortCliRepresentation) }
+    GitHub.repos(with: query, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+        let (repos, meta) = response
+
+        let packageQuantityStr = repos.count > 1 ? "packages" : "package"
+        spinner.succeed(text: "Found \(repos.count) \(packageQuantityStr)")
+
+        if verbosity.wasSet { print(meta.cliRepresentation) }
+
+        repos.forEach { print($0.shortCliRepresentation); usleep(15_000) }
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .info(let input):
-    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+        let (repo, meta) = response
+
+        spinner.stopAndClear()
+
+        if verbosity.wasSet { print(meta.cliRepresentation) }
+
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .home(let input):
-    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+        let (repo, meta) = response
+
+        spinner.stopAndClear()
+
+        if verbosity.wasSet { print(meta.cliRepresentation) }
+
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 case .add(let input):
-    GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
+    GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+        let (repo, meta) = response
+
+        spinner.stopAndClear()
+
+        if verbosity.wasSet { print(meta.cliRepresentation) }
+
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
@@ -120,16 +155,11 @@ case .add(let input):
         }
 
         try shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard for convenience, just paste it into your Package.swift.")
-        print()
-        print(packageString.green)
-        print()
-        print("Please bear in mind that apodidae can not be sure if it is actually possible to include this package in your project.")
-        print("It can only be safely assumed that this is a package written in Swift that contains a file named 'Package.swift'. It")
-        print("might also be an executable project instead of a library.")
+        print("The following has been copied to your clipboard for convenience, just paste it into your package manifest.")
+        print(packageString.lightCyan)
         exit(0)
     }.catch { error in
-        print(error.localizedDescription)
+        spinner.fail(text: error.localizedDescription)
         exit(1)
     }
 }

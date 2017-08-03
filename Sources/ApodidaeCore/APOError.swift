@@ -11,17 +11,17 @@ extension APOError: CustomStringConvertible {
     public var description: String {
         switch self {
         case .invalidQuery(let reason):
-            return "Invalid query: \(reason).".red
+            return "Invalid query: \(reason)."
         case .network:
-            return "There was an issue with the network. Perhaps your connection?".red
+            return "There was an issue with the network. Perhaps your connection?"
         case .server(statusCode: let statusCode):
             switch statusCode {
             case 404:
-                return "Could not find any data.".yellow
+                return "Could not find any data."
             case 409:
-                return "This package already exists on the server.".yellow
+                return "This package already exists on the server."
             default:
-                return "Server returned status \(statusCode).".red
+                return "Server returned status \(statusCode)."
             }
         }
     }
