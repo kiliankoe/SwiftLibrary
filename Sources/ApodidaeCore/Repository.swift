@@ -15,6 +15,14 @@ public struct Repository: Decodable {
     public let tags: [Tag]
     public let hasPackageManifest: Bool
 
+    public var owner: String {
+        return nameWithOwner.components(separatedBy: "/").first ?? ""
+    }
+
+    public var name: String {
+        return nameWithOwner.components(separatedBy: "/").last ?? ""
+    }
+
     private enum CodingKeys: String, CodingKey {
         case nameWithOwner
         case description
@@ -90,7 +98,7 @@ public struct Repository: Decodable {
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".yellow
         var output = """
-        - \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
+        - \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
           \(url.absoluteString.italic)
         """
         if isFork {
@@ -111,8 +119,8 @@ public struct Repository: Decodable {
         let fork = "Fork of \(parent ?? "unknown")".yellow
 
         var output = """
-        \(nameWithOwner.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
-        \(url.absoluteString.underline)\n
+        \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
+        \(url.absoluteString.italic)\n
         """
 
         if isFork {
