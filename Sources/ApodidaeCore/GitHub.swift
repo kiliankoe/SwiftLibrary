@@ -128,6 +128,30 @@ public enum GitHub {
         }
     }
 
+    public struct MetaInfo {
+        let totalRepositoryCount: Int
+        let swiftPackageCount: Int
+        let rateLimitRemaining: Int
+        let rateLimitResetAt: Date
+        let queryCost: Int
+
+        init(from response: SearchResponse) {
+            self.totalRepositoryCount = response.repositoryCount
+            self.swiftPackageCount = response.repositories.count
+            self.rateLimitRemaining = response.rateLimitRemaining
+            self.rateLimitResetAt = response.rateLimitResetAt
+            self.queryCost = response.queryCost
+        }
+
+        public var cliRepresentation: String {
+            return """
+            Found \(totalRepositoryCount) possible repositories on GitHub, \(swiftPackageCount) out of the top 100 of which seem to include a Package.swift.
+            You have ~\(rateLimitRemaining/queryCost)/\(5000 / queryCost) API requests remaining, which will be reset on \(rateLimitResetAt.iso).
+
+            """
+        }
+    }
+
     static let apiBaseURL = URL(string: "https://api.github.com/graphql")!
 
     static func send<T: GraphQLQuery>(query: T, isVerbose: Bool) -> Promise<T.Response> {
