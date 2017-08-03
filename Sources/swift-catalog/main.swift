@@ -98,7 +98,7 @@ case .search(let query):
     }
 case .info(let input):
     GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
-        spinner.stop(text: "", symbol: " ")
+        spinner.stopAndClear()
         print(repo.longCliRepresentation)
         exit(0)
     }.catch { error in
@@ -107,7 +107,7 @@ case .info(let input):
     }
 case .home(let input):
     GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
-        spinner.stop(text: "", symbol: " ")
+        spinner.stopAndClear()
         try shellOut(to: "open \(repo.url.absoluteString)")
         exit(0)
     }.catch { error in
@@ -116,7 +116,7 @@ case .home(let input):
     }
 case .add(let input):
     GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, isVerbose: verbosity.wasSet).then { repo in
-        spinner.stop(text: "", symbol: " ")
+        spinner.stopAndClear()
 
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
