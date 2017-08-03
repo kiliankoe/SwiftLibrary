@@ -96,7 +96,7 @@ public struct Repository: Decodable {
 
     public var shortCliRepresentation: String {
         let priv = isPrivate ? "private" : ""
-        let fork = "Fork of \(parent ?? "unknown")".yellow
+        let fork = "Fork of \(parent ?? "unknown")".lightBlue
         var output = """
         - \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
           \(url.absoluteString.italic)
@@ -116,7 +116,7 @@ public struct Repository: Decodable {
             .reversed()
             .joined(separator: ", ")
         let priv = isPrivate ? "private" : ""
-        let fork = "Fork of \(parent ?? "unknown")".yellow
+        let fork = "Fork of \(parent ?? "unknown")".lightBlue
 
         var output = """
         \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
