@@ -4,6 +4,7 @@ import CommandLineKit
 import Rainbow
 import ShellOut
 import CLISpinner
+import Signals
 
 let cli = CommandLine()
 
@@ -77,6 +78,11 @@ guard config.githubAccessToken != Config.tokenPlaceholder else {
 
 let spinner = Spinner(pattern: .dots, text: "Searching on GitHub...", color: .lightCyan)
 spinner.start()
+
+Signals.trap(signal: .int) { signal in
+    spinner.unhideCursor()
+    exit(1)
+}
 
 switch command {
 case .search(let query):
