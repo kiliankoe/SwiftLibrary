@@ -187,6 +187,11 @@ public enum GitHub {
     }
 
     public static func firstRepo(with query: String, accessToken: String, searchForks: Bool) -> Promise<(repo: Repository, meta: MetaInfo)> {
+        var searchForks = searchForks
+        if query.contains("/") {
+            // If a fully qualified identifier is given the user shouldn't have to set the forks flag
+            searchForks = true
+        }
         return repos(with: query, accessToken: accessToken, searchForks: searchForks).then { response in
             guard let first = response.repos.first else {
                 throw GitHub.Error.noPackages
