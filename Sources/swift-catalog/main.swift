@@ -94,7 +94,7 @@ case .search(let query):
 
         if verbosity.wasSet { print(meta.cliRepresentation) }
 
-        repos.forEach { print($0.shortCliRepresentation); usleep(15_000) }
+        repos.forEach { print($0.shortCliRepresentation); usleep(15_000) } // The short delay helps the eye follow the results output.
         exit(0)
     }.catch { error in
         spinner.fail(text: error.localizedDescription)
