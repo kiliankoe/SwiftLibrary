@@ -83,6 +83,10 @@ $ swift catalog add rxswift@commit:80de962 # same as above
 
 
 
+For convenience a shorthand syntax for the available commands is also available. You can use `s` instead of `search`, `i` instead of `info`, `h` instead of `home` and `a` or `+` instead of `add`.
+
+
+
 ## Questions or Feedback
 
 Did you run into any issues or have questions? Please don't hesitate to [open an issue](https://github.com/kiliankoe/apodidae/issues/new) or find me [@kiliankoe](https://twitter.com/kiliankoe) on Twitter.
