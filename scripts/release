@@ -2,7 +2,7 @@
 
 echo "Don't forget to tag the last commit before running this."
 echo "public let APODIDAE_VERSION = \""$(git describe)"\"" > Sources/ApodidaeCore/Version.swift
-swift build -c release
+swift build -c release -Xswiftc -static-stdlib
 cd .build/release
 tar -zcf apodidae.tar.gz swift-catalog
 shasum -a 256 apodidae.tar.gz
