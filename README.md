@@ -65,7 +65,7 @@ You can also run `swift catalog home rxswift` to directly open the homepage to a
 ```
 $ swift catalog add rxswift
 The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.
-.package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1")
+.package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1"),
 ```
 
 Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion n` flag.
