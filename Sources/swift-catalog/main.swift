@@ -26,9 +26,7 @@ let version = BoolOption(longFlag: "version", helpMessage: "Output the version o
 let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages.")
 
 let searchForksFlag = BoolOption(shortFlag: "f", longFlag: "search-forks", helpMessage: "Search for forks matching the query as well.")
-let swiftVersionFlag = IntOption(longFlag: "swiftversion", helpMessage: "Manually specify a swift version for the generated dependency string on `swift catalog add`.")
 
-cli.addOptions(help, version, verbosity, searchForksFlag, swiftVersionFlag)
 
 do {
     try cli.parse()

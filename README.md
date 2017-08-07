@@ -68,7 +68,7 @@ The following has been copied to your clipboard for convenience, just paste it i
 .package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1"),
 ```
 
-Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion n` flag.
+Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly.
 
 It's also possible to add a specific version or other requirement. All you have to do is add `@requirement` to the end of the package. This syntax may feel familiar if you've used npm. The following all work.
 
