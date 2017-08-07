@@ -106,6 +106,31 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(newManifest, expected)
     }
 
+    func testInsertPackageIntoManifestWitSingleLineDependencies() {
+        let package = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
+        let manifestWithSingleLineDependencies = """
+        import PackageDescription
+
+        let package = Package(
+            name: "manifest",
+            dependencies: []
+        )
+        """
+        let newManifest = try! Manifest.insert(package: package, requirement: .tag(package.latestVersion!), into: manifestWithSingleLineDependencies)
+
+        let expected = """
+        import PackageDescription
+
+        let package = Package(
+            name: "manifest",
+            dependencies: [
+                .Package(url: "https://github.com/kiliankoe/apodidae", majorVersion: 0, minor: 1),
+            ]
+        )
+        """
+        XCTAssertEqual(newManifest, expected)
+    }
+
     func testInsertPackageIntoManifestWithPackages() {
         let package = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
         let manifestWithPackages = """
