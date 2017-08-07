@@ -5,7 +5,7 @@ func confirm(_ text: String, default: Bool) -> Bool {
 
     while true {
         print("\(text) \(suffix)")
-        guard let input = readLine(strippingNewline: true) else { continue }
+        guard let input = readLine() else { continue }
         switch input.lowercased() {
         case "": return `default`
         case "y", "yes": return true
