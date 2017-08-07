@@ -168,7 +168,7 @@ case .add(let input):
             try Manifest.insertIntoLocalManifest(package: repo, requirement: requirement)
             print("Added \(repo.nameWithOwner.lightCyan) to your package manifest.")
         } catch {
-            print("An error occurred editing your package manifest: \(error.localizedDescription)")
+            print("An error occurred editing your package manifest: \(error.localizedDescription.red)")
             let swiftVersion = try SwiftVersion.readFromLocalPackage()
             let packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
             try shellOut(to: "echo '\(packageString)' | pbcopy")
