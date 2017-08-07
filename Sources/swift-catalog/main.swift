@@ -140,7 +140,7 @@ case .add(let input):
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
         } else {
-            swiftVersion = SwiftVersion.readFromLocalPackage()
+            swiftVersion = try SwiftVersion.readFromLocalPackage()
         }
 
         let packageString: String
