@@ -6,6 +6,7 @@ public enum Manifest {
 
     public enum Error: Swift.Error {
         case unsupportedLayout(reason: String)
+        case packageAlreadyExists
     }
 
     public static func findDependenciesInsertLocation(in manifest: String) throws -> (line: Int, indentation: Int) {
@@ -42,6 +43,8 @@ public enum Manifest {
     }
 
     public static func insert(package: Repository, requirement: Requirement, into manifest: String) throws -> String {
+        guard !manifest.contains(package.nameWithOwner) else { throw Error.packageAlreadyExists }
+
         let swiftVersion = SwiftVersion.guessVersion(fromPackageContents: manifest)
         let (line, indentation) = try findDependenciesInsertLocation(in: manifest)
 
@@ -80,6 +83,7 @@ extension Manifest.Error: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .unsupportedLayout(let reason): return "The layout of your Package.swift is unsupported. \(reason)"
+        case .packageAlreadyExists: return "The package to add already exists in your package manifest."
         }
     }
 }
