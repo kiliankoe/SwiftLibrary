@@ -16,7 +16,7 @@ public enum Manifest {
         let previousPackages = previousPackagesRegex.allMatches(in: manifest)
         if previousPackages.count > 0 {
             guard let lastPackageLocation = previousPackagesRegex.lineNumbersOfMatches(in: manifest).last else {
-                throw Error.unsupportedLayout(reason: "Found packages, but no packages. Wat. This shouldn't be happening o.O")
+                throw Error.unsupportedLayout(reason: "Found packages, but no packages. Wat. This shouldn't be happening o.O\nThis is considered a bug in apodidae. Please open an issue with your Package.swift, thanks!")
             }
             // FIXME: Indentation shouldn't be hardcoded
             // FIXME: Handle possibly missing trailing commas
