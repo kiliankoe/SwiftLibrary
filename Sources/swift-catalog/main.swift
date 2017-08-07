@@ -5,6 +5,7 @@ import Rainbow
 import ShellOut
 import CLISpinner
 import Signals
+import Files
 
 let cli = CommandLine()
 
@@ -136,35 +137,45 @@ case .add(let input):
 
         if verbosity.wasSet { print(meta.cliRepresentation) }
 
-        if try Git.uncommitedChanges() {
-            print("There are uncommitted changes present in your working directory.")
-            guard confirm("Do you want to continue anyways?", default: true) else {
+        do {
+            if try Git.uncommitedChanges() {
+                print("There are uncommitted changes present in your working directory.")
+                guard confirm("Do you want to continue anyways?", default: true) else {
+                    print("Exiting without changes.")
+                    exit(0)
+                }
+            }
+        } catch {
+            print("It appears you're not inside a git repository. Please be very sure about what you're doing.")
+            guard confirm("Continue?", default: false) else {
                 print("Exiting without changes.")
                 exit(0)
             }
         }
 
-        let swiftVersion: SwiftVersion
-        if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
-            swiftVersion = version
-        } else {
-            swiftVersion = try SwiftVersion.readFromLocalPackage()
-        }
-
-        let packageString: String
-        if let requirement = input.requirement {
-            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
+        let requirement: Requirement
+        if let req = input.requirement {
+            requirement = req
         } else {
             if let latestVersion = repo.tags.last?.name {
-                packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .tag(latestVersion))
+                requirement = .tag(latestVersion)
             } else {
-                packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
+                requirement = .branch("master")
             }
         }
 
-        try shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard for convenience, just paste it into your package manifest.")
-        print(packageString.lightCyan)
+        do {
+            try Manifest.insertIntoLocalManifest(package: repo, requirement: requirement)
+            print("Added \(input.package) to your package manifest.".lightCyan)
+        } catch {
+            print("An error occurred editing your package manifest: \(error.localizedDescription)")
+            let swiftVersion = try SwiftVersion.readFromLocalPackage()
+            let packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
+            try shellOut(to: "echo '\(packageString)' | pbcopy")
+            print("The following has been copied to your clipboard, please paste it into your manifest manually.")
+            print(packageString)
+        }
+
         exit(0)
     }.catch { error in
         spinner.fail(text: error.localizedDescription)
