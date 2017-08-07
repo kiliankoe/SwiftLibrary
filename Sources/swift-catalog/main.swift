@@ -26,7 +26,9 @@ let version = BoolOption(longFlag: "version", helpMessage: "Output the version o
 let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages.")
 
 let searchForksFlag = BoolOption(shortFlag: "f", longFlag: "search-forks", helpMessage: "Search for forks matching the query as well.")
+let noResolveFlag = BoolOption(longFlag: "no-resolve", helpMessage: "Don't run `swift package resolve` after adding packages.")
 
+cli.addOptions(help, version, verbosity, searchForksFlag, noResolveFlag)
 
 do {
     try cli.parse()
@@ -172,6 +174,24 @@ case .add(let input):
             try shellOut(to: "echo '\(packageString)' | pbcopy")
             print("The following has been copied to your clipboard, please paste it into your manifest manually.")
             print(packageString)
+            exit(0)
+        }
+
+        guard !noResolveFlag.wasSet else { exit(0) }
+
+        let resolveSpinner = Spinner(pattern: .dots, text: "Resolving dependencies...", color: .lightCyan)
+        resolveSpinner.start()
+
+        do {
+            try shellOut(to: "swift", arguments: ["package", "resolve"])
+            resolveSpinner.succeed(text: "Successfully resolved dependencies.")
+        } catch {
+            if let error = error as? ShellOutError {
+                resolveSpinner.fail(text: "\(error.message)")
+            } else {
+                resolveSpinner.fail(text: "\(error.localizedDescription)") // This case should probably be impossible...
+            }
+            exit(1)
         }
 
         exit(0)
