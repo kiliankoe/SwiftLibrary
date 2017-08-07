@@ -53,6 +53,12 @@ public enum Manifest {
         manifestLines.insert("\(indentationPrefix)\(packageString)", at: line)
         return manifestLines.joined(separator: "\n")
     }
+
+    public static func insertIntoLocalManifest(package: Repository, requirement: Requirement) throws {
+        let localManifest = try Folder.current.file(named: "Package.swift").readAsString()
+        let newManifest = try Manifest.insert(package: package, requirement: requirement, into: localManifest)
+        try Folder.current.file(atPath: "Package.swift").write(string: newManifest)
+    }
 }
 
 extension Regex {
