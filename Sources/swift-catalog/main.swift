@@ -136,6 +136,14 @@ case .add(let input):
 
         if verbosity.wasSet { print(meta.cliRepresentation) }
 
+        if try Git.uncommitedChanges() {
+            print("There are uncommitted changes present in your working directory.")
+            guard confirm("Do you want to continue anyways?", default: true) else {
+                print("Exiting without changes.")
+                exit(0)
+            }
+        }
+
         let swiftVersion: SwiftVersion
         if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
             swiftVersion = version
