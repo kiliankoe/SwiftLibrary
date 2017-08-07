@@ -11,7 +11,7 @@ public enum Manifest {
     public static func findDependenciesInsertLocation(in manifest: String) throws -> (line: Int, indentation: Int) {
         let previousPackagesRegex = Regex("url: \"(\\S+)\",(.+)\\)")
         let dependenciesRegex = Regex("dependencies:\\s?\\[")
-        let targetsRegex = Regex("targets")
+        let targetsRegex = Regex("target\\(", options: .ignoreCase)
 
         let previousPackages = previousPackagesRegex.allMatches(in: manifest)
         if previousPackages.count > 0 {
