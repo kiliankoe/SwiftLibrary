@@ -12,7 +12,7 @@ class RepositoryTests: XCTestCase {
         var repo = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
         XCTAssertEqual(repo.latestVersion, "0.1.0")
 
-        repo.tags = ["0.2.0", "1.0.0"]
+        repo.tags = ["1.0.0", "0.2.0"]
         XCTAssertEqual(repo.latestVersion, "1.0.0")
     }
 

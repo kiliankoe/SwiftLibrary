@@ -91,7 +91,7 @@ public struct Repository: Decodable {
     }
 
     public var latestVersion: String? {
-        return tags.last
+        return tags.first
     }
 
     public var shortCliRepresentation: String {
