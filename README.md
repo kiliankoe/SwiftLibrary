@@ -21,6 +21,15 @@ $ brew install apodidae
 
 Apodidae conveniently installs as `swift-catalog` which enables you to just call it as if it were a subcommand on swift itself as `swift catalog ...`. See the usage examples below for more.
 
+You can of course also install apodidae manually.
+
+```
+$ git clone https://github.com/kiliankoe/apodidae
+$ cd apodidae
+$ swift build -c release -Xswiftc -static-stdlib
+$ cp .build/release/swift-catalog /usr/local/bin/swift-catalog
+```
+
 
 
 ## Usage
