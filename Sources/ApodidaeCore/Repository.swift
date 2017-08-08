@@ -175,7 +175,16 @@ public struct Repository: Decodable {
         public init(from decoder: Decoder) throws {
             let nodeContainer = try decoder.container(keyedBy: NodeKeys.self)
             let container = try nodeContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .node)
-            self.name = try container.decode(String.self, forKey: .name)
+            let name = try container.decode(String.self, forKey: .name)
+            self.init(with: name)
+        }
+
+        public init(with name: String) {
+            if name.hasPrefix("v") {
+                self.name = String(name.dropFirst())
+            } else {
+                self.name = name
+            }
         }
     }
 }

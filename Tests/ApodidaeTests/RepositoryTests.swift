@@ -42,4 +42,9 @@ class RepositoryTests: XCTestCase {
             XCTAssert(error is Repository.DependencyRepresentationError)
         }
     }
+
+    func testTagInit() {
+        XCTAssertEqual(Repository.Tag(with: "0.1.0").name, "0.1.0")
+        XCTAssertEqual(Repository.Tag(with: "v0.1.0").name, "0.1.0")
+    }
 }
