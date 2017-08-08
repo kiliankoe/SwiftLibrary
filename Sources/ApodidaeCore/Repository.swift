@@ -1,6 +1,9 @@
 import Foundation
 import Rainbow
 
+public typealias Tag = String
+public typealias Head = String
+
 public struct Repository: Decodable {
     public let nameWithOwner: String
     public let description: String?
@@ -12,7 +15,8 @@ public struct Repository: Decodable {
     public let license: String?
     public let openIssues: Int
     public let stargazers: Int
-    public let tags: [Tag]
+    public var tags: [Tag] = []
+    public var heads: [Head] = []
     public let hasPackageManifest: Bool
 
     public var owner: String {
@@ -34,7 +38,6 @@ public struct Repository: Decodable {
         case license
         case openIssues
         case stargazers
-        case tags
         case packageManifest
     }
 
@@ -79,9 +82,6 @@ public struct Repository: Decodable {
         let stargazersContainer = try container.nestedContainer(keyedBy: TotalCountContainer.self, forKey: .stargazers)
         self.stargazers = try stargazersContainer.decode(Int.self, forKey: .totalCount)
 
-        let tagsEdgesContainer = try container.nestedContainer(keyedBy: EdgesKeys.self, forKey: .tags)
-        self.tags = try tagsEdgesContainer.decode([Tag].self, forKey: .edges)
-
         let packageManifestContainer = try? container.nestedContainer(keyedBy: PackageManifestContainer.self, forKey: .packageManifest)
         if let _ = packageManifestContainer {
             self.hasPackageManifest = true
@@ -91,14 +91,14 @@ public struct Repository: Decodable {
     }
 
     public var latestVersion: String? {
-        return tags.last?.name
+        return tags.first
     }
 
     public var shortCliRepresentation: String {
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".lightBlue
         var output = """
-        - \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
+        - \(owner.bold.italic)/\(name.lightCyan.bold) \(priv.yellow)
           \(url.absoluteString.italic)
         """
         if isFork {
@@ -111,9 +111,8 @@ public struct Repository: Decodable {
     }
 
     public var longCliRepresentation: String {
-        let versions = self.tags
-            .map { $0.name }
-            .reversed()
+        let bound = self.tags.count >= 8 ? 8 : self.tags.count
+        let versions = self.tags[..<bound]
             .joined(separator: ", ")
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".lightBlue
@@ -139,6 +138,7 @@ public struct Repository: Decodable {
 
         Last activity: \(pushedAt.iso)
         Last versions: \(versions)
+        Branches: \(heads.joined(separator: ", "))
         """
 
         return output
@@ -146,36 +146,26 @@ public struct Repository: Decodable {
 
     public enum DependencyRepresentationError: Error {
         case notRepresentableWithSwift3(Requirement)
+        case tagNotAvailable
+        case branchNotAvailable
     }
 
     public func dependencyRepresentation(for swiftVersion: SwiftVersion, requirement: Requirement) throws -> String {
+        switch requirement {
+        case .tag(let tag):
+            guard self.tags.contains(tag) else { throw DependencyRepresentationError.tagNotAvailable }
+        case .branch(let branch):
+            guard self.heads.contains(branch) else { throw DependencyRepresentationError.branchNotAvailable }
+        default: break
+        }
+
         switch swiftVersion {
         case .v3:
-            guard case .tag(let version) = requirement else {
-                throw DependencyRepresentationError.notRepresentableWithSwift3(requirement)
-            }
+            guard case .tag(let version) = requirement else { throw DependencyRepresentationError.notRepresentableWithSwift3(requirement) }
             let versionComponents = version.components(separatedBy: ".")
             return ".Package(url: \"\(self.url)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1])),"
         case .v4:
             return ".package(url: \"\(self.url)\", \(requirement.packageString)),"
-        }
-    }
-
-    public struct Tag: Decodable {
-        public let name: String
-
-        private enum NodeKeys: String, CodingKey {
-            case node
-        }
-
-        private enum CodingKeys: String, CodingKey {
-            case name
-        }
-
-        public init(from decoder: Decoder) throws {
-            let nodeContainer = try decoder.container(keyedBy: NodeKeys.self)
-            let container = try nodeContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .node)
-            self.name = try container.decode(String.self, forKey: .name)
         }
     }
 }
@@ -185,6 +175,8 @@ extension Repository.DependencyRepresentationError: LocalizedError {
         switch self {
         case .notRepresentableWithSwift3(let requirement):
             return "The requirement '\(requirement)' is not possible to represent in Swift 3 package manifests."
+        case .tagNotAvailable: return "The specified tag could not be found for this package."
+        case .branchNotAvailable: return "The specified branch could not be found for this package."
         }
     }
 }

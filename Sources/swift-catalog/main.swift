@@ -102,7 +102,7 @@ case .search(let query):
         exit(1)
     }
 case .info(let input):
-    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+    GitHub.firstRepoIncludingRefs(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
@@ -130,7 +130,7 @@ case .home(let input):
         exit(1)
     }
 case .add(let input):
-    GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+    GitHub.firstRepoIncludingRefs(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
@@ -157,10 +157,10 @@ case .add(let input):
         if let req = input.requirement {
             requirement = req
         } else {
-            if let latestVersion = repo.tags.last?.name {
+            if let latestVersion = repo.latestVersion {
                 requirement = .tag(latestVersion)
             } else {
-                requirement = .branch("master")
+                requirement = repo.heads.contains("master") ? .branch("master") : .branch(repo.heads.first!) // this will crash if the repo contains no branches... Can that happen?
             }
         }
 
