@@ -34,13 +34,6 @@ struct RepoQuery: GraphQLQuery {
               stargazers(first: 0) {
                 totalCount
               }
-              tags: refs(refPrefix: "refs/tags/", last: 5) {
-                edges {
-                  node {
-                    name
-                  }
-                }
-              }
               packageManifest: object(expression: "master:Package.swift") {
                 ... on Blob {
                   abbreviatedOid
