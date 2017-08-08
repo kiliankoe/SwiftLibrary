@@ -160,7 +160,7 @@ case .add(let input):
             if let latestVersion = repo.latestVersion {
                 requirement = .tag(latestVersion)
             } else {
-                requirement = .branch("master")
+                requirement = repo.heads.contains("master") ? .branch("master") : .branch(repo.heads.first!) // this will crash if the repo contains no branches... Can that happen?
             }
         }
 
