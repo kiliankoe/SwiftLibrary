@@ -146,14 +146,22 @@ public struct Repository: Decodable {
 
     public enum DependencyRepresentationError: Error {
         case notRepresentableWithSwift3(Requirement)
+        case tagNotAvailable
+        case branchNotAvailable
     }
 
     public func dependencyRepresentation(for swiftVersion: SwiftVersion, requirement: Requirement) throws -> String {
+        switch requirement {
+        case .tag(let tag):
+            guard self.tags.contains(tag) else { throw DependencyRepresentationError.tagNotAvailable }
+        case .branch(let branch):
+            guard self.heads.contains(branch) else { throw DependencyRepresentationError.branchNotAvailable }
+        default: break
+        }
+
         switch swiftVersion {
         case .v3:
-            guard case .tag(let version) = requirement else {
-                throw DependencyRepresentationError.notRepresentableWithSwift3(requirement)
-            }
+            guard case .tag(let version) = requirement else { throw DependencyRepresentationError.notRepresentableWithSwift3(requirement) }
             let versionComponents = version.components(separatedBy: ".")
             return ".Package(url: \"\(self.url)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1])),"
         case .v4:
@@ -167,6 +175,8 @@ extension Repository.DependencyRepresentationError: LocalizedError {
         switch self {
         case .notRepresentableWithSwift3(let requirement):
             return "The requirement '\(requirement)' is not possible to represent in Swift 3 package manifests."
+        case .tagNotAvailable: return "The specified tag could not be found for this package."
+        case .branchNotAvailable: return "The specified branch could not be found for this package."
         }
     }
 }
