@@ -111,9 +111,8 @@ public struct Repository: Decodable {
     }
 
     public var longCliRepresentation: String {
-        let versions = self.tags
-            .map { $0.name }
-            .reversed()
+        let bound = self.tags.count >= 8 ? 8 : self.tags.count
+        let versions = self.tags[..<bound]
             .joined(separator: ", ")
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".lightBlue
