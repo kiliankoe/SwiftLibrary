@@ -102,7 +102,7 @@ case .search(let query):
         exit(1)
     }
 case .info(let input):
-    GitHub.firstRepo(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+    GitHub.firstRepoIncludingRefs(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
@@ -157,7 +157,7 @@ case .add(let input):
         if let req = input.requirement {
             requirement = req
         } else {
-            if let latestVersion = repo.tags.last?.name {
+            if let latestVersion = repo.tags.last {
                 requirement = .tag(latestVersion)
             } else {
                 requirement = .branch("master")
