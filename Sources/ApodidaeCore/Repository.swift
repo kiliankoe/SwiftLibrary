@@ -138,6 +138,7 @@ public struct Repository: Decodable {
 
         Last activity: \(pushedAt.iso)
         Last versions: \(versions)
+        Branches: \(heads.joined(separator: ", "))
         """
 
         return output
