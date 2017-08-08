@@ -1,6 +1,9 @@
 import Foundation
 import Rainbow
 
+public typealias Tag = String
+public typealias Head = String
+
 public struct Repository: Decodable {
     public let nameWithOwner: String
     public let description: String?
@@ -12,7 +15,8 @@ public struct Repository: Decodable {
     public let license: String?
     public let openIssues: Int
     public let stargazers: Int
-    public var tags: [Tag]
+    public var tags: [Tag] = []
+    public var heads: [Head] = []
     public let hasPackageManifest: Bool
 
     public var owner: String {
@@ -34,7 +38,6 @@ public struct Repository: Decodable {
         case license
         case openIssues
         case stargazers
-        case tags
         case packageManifest
     }
 
@@ -79,9 +82,6 @@ public struct Repository: Decodable {
         let stargazersContainer = try container.nestedContainer(keyedBy: TotalCountContainer.self, forKey: .stargazers)
         self.stargazers = try stargazersContainer.decode(Int.self, forKey: .totalCount)
 
-        let tagsEdgesContainer = try container.nestedContainer(keyedBy: EdgesKeys.self, forKey: .tags)
-        self.tags = try tagsEdgesContainer.decode([Tag].self, forKey: .edges)
-
         let packageManifestContainer = try? container.nestedContainer(keyedBy: PackageManifestContainer.self, forKey: .packageManifest)
         if let _ = packageManifestContainer {
             self.hasPackageManifest = true
@@ -91,14 +91,14 @@ public struct Repository: Decodable {
     }
 
     public var latestVersion: String? {
-        return tags.last?.name
+        return tags.last
     }
 
     public var shortCliRepresentation: String {
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".lightBlue
         var output = """
-        - \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
+        - \(owner.bold.italic)/\(name.lightCyan.bold) \(priv.yellow)
           \(url.absoluteString.italic)
         """
         if isFork {
@@ -158,33 +158,6 @@ public struct Repository: Decodable {
             return ".Package(url: \"\(self.url)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1])),"
         case .v4:
             return ".package(url: \"\(self.url)\", \(requirement.packageString)),"
-        }
-    }
-
-    public struct Tag: Decodable {
-        public let name: String
-
-        private enum NodeKeys: String, CodingKey {
-            case node
-        }
-
-        private enum CodingKeys: String, CodingKey {
-            case name
-        }
-
-        public init(from decoder: Decoder) throws {
-            let nodeContainer = try decoder.container(keyedBy: NodeKeys.self)
-            let container = try nodeContainer.nestedContainer(keyedBy: CodingKeys.self, forKey: .node)
-            let name = try container.decode(String.self, forKey: .name)
-            self.init(with: name)
-        }
-
-        public init(with name: String) {
-            if name.hasPrefix("v") {
-                self.name = String(name.dropFirst())
-            } else {
-                self.name = name
-            }
         }
     }
 }
