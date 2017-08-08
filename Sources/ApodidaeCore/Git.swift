@@ -29,6 +29,7 @@ public enum Git {
 
         let tags = refs
             .filter { $0.hasPrefix("refs/tags") }
+            .filter { !$0.contains("^{") } // filter github releases (I think these are releases)
             .map { $0.replacingOccurrences(of: "refs/tags/", with: "") }
 
         return (heads, tags)
