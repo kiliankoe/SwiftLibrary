@@ -130,7 +130,7 @@ case .home(let input):
         exit(1)
     }
 case .add(let input):
-    GitHub.firstRepo(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet).then { response in
+    GitHub.firstRepoIncludingRefs(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
