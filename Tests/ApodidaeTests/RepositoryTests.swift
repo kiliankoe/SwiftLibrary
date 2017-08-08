@@ -12,8 +12,8 @@ class RepositoryTests: XCTestCase {
         var repo = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
         XCTAssertEqual(repo.latestVersion, "0.1.0")
 
-        repo.tags = [Repository.Tag(with: "v0.2.0")]
-        XCTAssertEqual(repo.latestVersion, "0.2.0")
+        repo.tags = ["0.2.0", "1.0.0"]
+        XCTAssertEqual(repo.latestVersion, "1.0.0")
     }
 
     func testDependencyRepresentation() {
@@ -44,10 +44,5 @@ class RepositoryTests: XCTestCase {
         } catch {
             XCTAssert(error is Repository.DependencyRepresentationError)
         }
-    }
-
-    func testTagInit() {
-        XCTAssertEqual(Repository.Tag(with: "0.1.0").name, "0.1.0")
-        XCTAssertEqual(Repository.Tag(with: "v0.1.0").name, "0.1.0")
     }
 }

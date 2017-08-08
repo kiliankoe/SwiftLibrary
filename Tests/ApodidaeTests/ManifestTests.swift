@@ -175,13 +175,8 @@ extension Repository {
         self.license = nil
         self.openIssues = 0
         self.stargazers = 0
-        self.tags = [Repository.Tag(name: "0.1.0")]
+        self.tags = ["0.1.0"]
+        self.heads = ["master"]
         self.hasPackageManifest = true
-    }
-}
-
-extension Repository.Tag {
-    init(name: String) {
-        self.name = name
     }
 }

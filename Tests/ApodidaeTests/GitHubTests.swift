@@ -25,35 +25,6 @@ class GitHubTests: XCTestCase {
                     "stargazers": {
                       "totalCount": 11
                     },
-                    "tags": {
-                      "edges": [
-                        {
-                          "node": {
-                            "name": "1.1.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "2.0.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "2.1.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "2.2.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "2.3.0"
-                          }
-                        }
-                      ]
-                    },
                     "packageManifest": {
                       "abbreviatedOid": "3571935"
                     }
@@ -74,15 +45,6 @@ class GitHubTests: XCTestCase {
                     },
                     "stargazers": {
                       "totalCount": 0
-                    },
-                    "tags": {
-                      "edges": [
-                        {
-                          "node": {
-                            "name": "0.1.0"
-                          }
-                        }
-                      ]
                     },
                     "packageManifest": {
                       "abbreviatedOid": "5338ca5"
@@ -105,25 +67,6 @@ class GitHubTests: XCTestCase {
                     "stargazers": {
                       "totalCount": 0
                     },
-                    "tags": {
-                      "edges": [
-                        {
-                          "node": {
-                            "name": "0.1.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "0.2.0"
-                          }
-                        },
-                        {
-                          "node": {
-                            "name": "0.2.1"
-                          }
-                        }
-                      ]
-                    },
                     "packageManifest": {
                       "abbreviatedOid": "dcc137a"
                     }
@@ -145,9 +88,6 @@ class GitHubTests: XCTestCase {
                     "stargazers": {
                       "totalCount": 3
                     },
-                    "tags": {
-                      "edges": []
-                    },
                     "packageManifest": null
                   }
                 },
@@ -167,9 +107,6 @@ class GitHubTests: XCTestCase {
                     "stargazers": {
                       "totalCount": 1
                     },
-                    "tags": {
-                      "edges": []
-                    },
                     "packageManifest": null
                   }
                 },
@@ -188,9 +125,6 @@ class GitHubTests: XCTestCase {
                     },
                     "stargazers": {
                       "totalCount": 1
-                    },
-                    "tags": {
-                      "edges": []
                     },
                     "packageManifest": null
                   }
@@ -214,7 +148,6 @@ class GitHubTests: XCTestCase {
 
         XCTAssertEqual(response.data?.repositories.count, 3)
         XCTAssertEqual(response.data?.repositories[0].nameWithOwner, "kiliankoe/DVB")
-        XCTAssertEqual(response.data?.repositories[0].tags.first?.name, "1.1.0")
         XCTAssertTrue(response.data?.repositories[0].hasPackageManifest ?? false)
     }
 
