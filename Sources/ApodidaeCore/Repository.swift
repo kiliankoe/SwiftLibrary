@@ -12,7 +12,7 @@ public struct Repository: Decodable {
     public let license: String?
     public let openIssues: Int
     public let stargazers: Int
-    public let tags: [Tag]
+    public var tags: [Tag]
     public let hasPackageManifest: Bool
 
     public var owner: String {

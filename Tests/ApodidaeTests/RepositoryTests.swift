@@ -9,8 +9,11 @@ class RepositoryTests: XCTestCase {
     }
 
     func testLatestVersion() {
-        let repo = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
+        var repo = Repository(name: "kiliankoe/apodidae", url: "https://github.com/kiliankoe/apodidae")
         XCTAssertEqual(repo.latestVersion, "0.1.0")
+
+        repo.tags = [Repository.Tag(with: "v0.2.0")]
+        XCTAssertEqual(repo.latestVersion, "0.2.0")
     }
 
     func testDependencyRepresentation() {
