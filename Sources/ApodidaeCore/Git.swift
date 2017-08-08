@@ -19,7 +19,7 @@ public enum Git {
         guard !result.contains("remote: Not Found") else { throw Error.remoteNotFound }
         let refs = result
             .split(separator: "\n")
-            .map { $0.split(separator: " ") }
+            .map { $0.split(separator: "\t") }
             .flatMap { $0.last }
             .map(String.init)
 
