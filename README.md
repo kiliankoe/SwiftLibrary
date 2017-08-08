@@ -31,13 +31,13 @@ Apodidae exposes a handful of commands. Their use is probably best shown with a 
 
 ```
 $ swift catalog search rxswift
-- ReactiveX/RxSwift 3.6.1
+- ReactiveX/RxSwift
   https://github.com/ReactiveX/RxSwift
   Reactive Programming in Swift
-- Moya/Moya 9.0.0-alpha.1
+- Moya/Moya
   https://github.com/Moya/Moya
   Network abstraction layer written in Swift.
-- devxoul/RxViewController 0.2.0
+- devxoul/RxViewController
   https://github.com/devxoul/RxViewController
   RxSwift wrapper for UIViewController and NSViewController
 ...
@@ -56,6 +56,7 @@ MIT License
 
 Last activity: 2017-07-29 14:30:05
 Last versions: 3.6.1, 3.6.0, 3.5.0, 3.4.1, 3.4.0
+Branches: develop, master
 ```
 
 You can also run `swift catalog home rxswift` to directly open the homepage to a specific package in your browser. You may know this feature from homebrew.
