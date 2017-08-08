@@ -37,6 +37,14 @@ public enum Git {
                 }
                 return tag
             }
+            .map { tag -> String in
+                // some people leave of the patch version, which spm/semver requires.
+                // FIXME: This is very naive and doesn't handle things like `2.0-alpha.1` correctly.
+                if tag.split(separator: ".").count < 3 {
+                    return "\(tag).0"
+                }
+                return tag
+            }
 
         let sortedDeduplicatedTags = Array(Set(tags)).sorted(by: >)
 
