@@ -5,6 +5,7 @@ import Rainbow
 import ShellOut
 import CLISpinner
 import Signals
+import Files
 
 let cli = CommandLine()
 
@@ -25,9 +26,9 @@ let version = BoolOption(longFlag: "version", helpMessage: "Output the version o
 let verbosity = BoolOption(shortFlag: "v", longFlag: "verbose", helpMessage: "Print verbose messages.")
 
 let searchForksFlag = BoolOption(shortFlag: "f", longFlag: "search-forks", helpMessage: "Search for forks matching the query as well.")
-let swiftVersionFlag = IntOption(longFlag: "swiftversion", helpMessage: "Manually specify a swift version for the generated dependency string on `swift catalog add`.")
+let noResolveFlag = BoolOption(longFlag: "no-resolve", helpMessage: "Don't run `swift package resolve` after adding packages.")
 
-cli.addOptions(help, version, verbosity, searchForksFlag, swiftVersionFlag)
+cli.addOptions(help, version, verbosity, searchForksFlag, noResolveFlag)
 
 do {
     try cli.parse()
@@ -136,27 +137,63 @@ case .add(let input):
 
         if verbosity.wasSet { print(meta.cliRepresentation) }
 
-        let swiftVersion: SwiftVersion
-        if swiftVersionFlag.wasSet, let version = SwiftVersion(from: swiftVersionFlag.value ?? 0) {
-            swiftVersion = version
-        } else {
-            swiftVersion = SwiftVersion.readFromLocalPackage()
-        }
-
-        let packageString: String
-        if let requirement = input.requirement {
-            packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
-        } else {
-            if let latestVersion = repo.tags.last?.name {
-                packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .tag(latestVersion))
-            } else {
-                packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: .branch("master"))
+        do {
+            if try Git.uncommitedChanges() {
+                print("There are uncommitted changes present in your working directory.")
+                guard confirm("Do you want to continue anyways?", default: true) else {
+                    print("Exiting without changes.")
+                    exit(0)
+                }
+            }
+        } catch {
+            print("It appears you're not inside a git repository. Please be very sure about what you're doing.")
+            guard confirm("Continue?", default: false) else {
+                print("Exiting without changes.")
+                exit(0)
             }
         }
 
-        try shellOut(to: "echo '\(packageString)' | pbcopy")
-        print("The following has been copied to your clipboard for convenience, just paste it into your package manifest.")
-        print(packageString.lightCyan)
+        let requirement: Requirement
+        if let req = input.requirement {
+            requirement = req
+        } else {
+            if let latestVersion = repo.tags.last?.name {
+                requirement = .tag(latestVersion)
+            } else {
+                requirement = .branch("master")
+            }
+        }
+
+        do {
+            try Manifest.insertIntoLocalManifest(package: repo, requirement: requirement)
+            print("Added \(repo.nameWithOwner.lightCyan) to your package manifest.")
+        } catch {
+            print("An error occurred editing your package manifest: \(error.localizedDescription.red)")
+            let swiftVersion = try SwiftVersion.readFromLocalPackage()
+            let packageString = try repo.dependencyRepresentation(for: swiftVersion, requirement: requirement)
+            try shellOut(to: "echo '\(packageString)' | pbcopy")
+            print("The following has been copied to your clipboard, please paste it into your manifest manually.")
+            print(packageString)
+            exit(0)
+        }
+
+        guard !noResolveFlag.wasSet else { exit(0) }
+
+        let resolveSpinner = Spinner(pattern: .dots, text: "Resolving dependencies...", color: .lightCyan)
+        resolveSpinner.start()
+
+        do {
+            try shellOut(to: "swift", arguments: ["package", "resolve"])
+            resolveSpinner.succeed(text: "Successfully resolved dependencies.")
+        } catch {
+            if let error = error as? ShellOutError {
+                resolveSpinner.fail(text: "\(error.message)")
+            } else {
+                resolveSpinner.fail(text: "\(error.localizedDescription)") // This case should probably be impossible...
+            }
+            exit(1)
+        }
+
         exit(0)
     }.catch { error in
         spinner.fail(text: error.localizedDescription)

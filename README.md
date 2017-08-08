@@ -64,11 +64,11 @@ You can also run `swift catalog home rxswift` to directly open the homepage to a
 
 ```
 $ swift catalog add rxswift
-The following has been copied to your clipboard for convenience, just paste it into your package manifests's dependencies.
-.package(url: "https://github.com/ReactiveX/RxSwift", from: "3.6.1"),
+Added ReactiveX/RxSwift to your package manifest.
+✔ Successfully resolved dependencies.
 ```
 
-Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and output accordingly. You can also override manually using the `--swiftversion n` flag.
+Apodidae will try to figure out if the project in the current directory uses Swift 3 or 4 and edit your manifest accordingly. After adding it to your manifest apodidae calls out to `swift package resolve` to resolve your new list of dependencies. If unwanted this can be skipped using the flag `--no-resolve`. 
 
 It's also possible to add a specific version or other requirement. All you have to do is add `@requirement` to the end of the package. This syntax may feel familiar if you've used npm. The following all work.
 

@@ -14,13 +14,20 @@ public enum SwiftVersion {
 
     public static var currentStable: SwiftVersion = .v3
 
-    public static func readFromLocalPackage() -> SwiftVersion {
-        guard let packageManifest = try? Folder.current.file(named: "Package.swift").readAsString() else {
-            return currentStable
-        }
-        if packageManifest.contains("swift-tools-version:3") {
+    public static func readFromLocalPackage() throws -> SwiftVersion {
+        return try readFrom(packageManifest: Folder.current.file(named: "Package.swift"))
+    }
+
+    public static func readFrom(packageManifest: File) throws -> SwiftVersion {
+        let manifest = try packageManifest.readAsString()
+        return guessVersion(fromPackageContents: manifest)
+    }
+
+    public static func guessVersion(fromPackageContents manifest: String) -> SwiftVersion {
+        if manifest.contains("swift-tools-version:3") || manifest.contains(".Package") {
             return .v3
-        } else if packageManifest.contains("swift-tools-version:4") {
+        } else if manifest.contains("swift-tools-version:4") || manifest.contains(".package") {
+            // Checking for `.package` for v4 will fail on future swift versions. It should just be here temporarily...
             return .v4
         } else {
             return currentStable
