@@ -157,7 +157,7 @@ case .add(let input):
         if let req = input.requirement {
             requirement = req
         } else {
-            if let latestVersion = repo.tags.last {
+            if let latestVersion = repo.latestVersion {
                 requirement = .tag(latestVersion)
             } else {
                 requirement = .branch("master")
