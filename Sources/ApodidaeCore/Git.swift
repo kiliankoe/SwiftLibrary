@@ -29,10 +29,18 @@ public enum Git {
 
         let tags = refs
             .filter { $0.hasPrefix("refs/tags") }
-            .filter { !$0.contains("^{") } // filter github releases (I think these are releases)
             .map { $0.replacingOccurrences(of: "refs/tags/", with: "") }
+            .filter { !$0.contains("^{") } // filter github releases (I think these are releases)
+            .map { tag -> String in
+                if tag.lowercased().hasPrefix("v") {
+                    return String(tag.dropFirst())
+                }
+                return tag
+            }
 
-        return (heads, tags)
+        let sortedDeduplicatedTags = Array(Set(tags)).sorted(by: >)
+
+        return (heads, sortedDeduplicatedTags)
     }
 }
 
