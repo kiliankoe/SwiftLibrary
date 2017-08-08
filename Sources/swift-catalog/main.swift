@@ -38,9 +38,9 @@ do {
 }
 
 guard !help.wasSet else {
-    cli.printUsage()
-    print()
     print(Command.exampleUsage)
+    print()
+    cli.printUsage()
     exit(0)
 }
 
