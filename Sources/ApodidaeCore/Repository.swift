@@ -1,4 +1,5 @@
 import Foundation
+import Regex
 import Rainbow
 
 public typealias Tag = String
@@ -26,6 +27,14 @@ public struct Repository: Decodable {
         return false
     }
 
+    public var dependencies: [String] {
+        guard let manifest = self.packageManifest else { return [] }
+        let packageRegex = Regex("url: \"(\\S+)\",.+\\)")
+        let githubRegex = Regex("https?:\\/\\/github.com\\/")
+        return packageRegex.allMatches(in: manifest)
+            .flatMap { $0.captures.first ?? nil }
+            .map { $0.replacingAll(matching: githubRegex, with: "") }
+    }
 
     public var owner: String {
         return nameWithOwner.components(separatedBy: "/").first ?? ""
