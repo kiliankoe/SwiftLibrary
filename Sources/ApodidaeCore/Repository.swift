@@ -31,9 +31,12 @@ public struct Repository: Decodable {
         guard let manifest = self.packageManifest else { return [] }
         let packageRegex = Regex("url: \"(\\S+)\",.+\\)")
         let githubRegex = Regex("https?:\\/\\/github.com\\/")
+        let gitSuffixRegex = Regex(".git$")
+
         return packageRegex.allMatches(in: manifest)
             .flatMap { $0.captures.first ?? nil }
             .map { $0.replacingAll(matching: githubRegex, with: "") }
+            .map { $0.replacingAll(matching: gitSuffixRegex, with: "") }
     }
 
     public var owner: String {
