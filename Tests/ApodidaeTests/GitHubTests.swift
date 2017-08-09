@@ -26,7 +26,7 @@ class GitHubTests: XCTestCase {
                       "totalCount": 11
                     },
                     "packageManifest": {
-                      "abbreviatedOid": "3571935"
+                      "text": "import PackageDescription\\n\\nlet package = Package(\\n    name: \\"DVB\\",\\n    dependencies: [\\n        .Package(url: \\"https://github.com/utahiosmac/Marshal\\", majorVersion: 1, minor: 2),\\n        .Package(url: \\"https://github.com/kiliankoe/gausskrueger\\", majorVersion: 0, minor: 3),\\n    ]\\n)\\n"
                     }
                   }
                 },
@@ -47,8 +47,27 @@ class GitHubTests: XCTestCase {
                       "totalCount": 0
                     },
                     "packageManifest": {
-                      "abbreviatedOid": "5338ca5"
+                      "text": "// swift-tools-version:4.0\\n// The swift-tools-version declares the minimum version of Swift required to build this package.\\n\\nimport PackageDescription\\n\\nlet package = Package(\\n    name: \\"alfred_emeal\\",\\n    dependencies: [\\n        // Dependencies declare other packages that this package depends on.\\n        // .package(url: /* package url */, from: \\"1.0.0\\"),\\n        .package(url: \\"https://github.com/benchr267/swiftalfred\\", .branch(\\"master\\")),\\n        .package(url: \\"https://github.com/kiliankoe/StuWeDD\\", from: \\"0.2.1\\")\\n    ],\\n    targets: [\\n        // Targets are the basic building blocks of a package. A target can define a module or a test suite.\\n        // Targets can depend on other targets in this package, and on products in packages which this package depends on.\\n        .target(\\n            name: \\"alfred_emeal\\",\\n            dependencies: [\\"SwiftAlfred\\", \\"StuWeDD\\"]),\\n    ]\\n)\\n"
                     }
+                  }
+                },
+                {
+                  "node": {
+                    "nameWithOwner": "kiliankoe/campusnavigator",
+                    "description": "🗺 Campus Navigator",
+                    "url": "https://github.com/kiliankoe/campusnavigator",
+                    "isFork": false,
+                    "parent": null,
+                    "isPrivate": true,
+                    "pushedAt": "2017-02-17T21:06:10Z",
+                    "license": null,
+                    "openIssues": {
+                      "totalCount": 22
+                    },
+                    "stargazers": {
+                      "totalCount": 0
+                    },
+                    "packageManifest": null
                   }
                 },
                 {
@@ -68,7 +87,7 @@ class GitHubTests: XCTestCase {
                       "totalCount": 0
                     },
                     "packageManifest": {
-                      "abbreviatedOid": "dcc137a"
+                      "text": "// swift-tools-version:4.0\\n// The swift-tools-version declares the minimum version of Swift required to build this package.\\n\\nimport PackageDescription\\n\\nlet package = Package(\\n    name: \\"StuWeDD\\",\\n    products: [\\n        // Products define the executables and libraries produced by a package, and make them visible to other packages.\\n        .library(\\n            name: \\"StuWeDD\\",\\n            targets: [\\"StuWeDD\\"]),\\n    ],\\n    dependencies: [\\n        // Dependencies declare other packages that this package depends on.\\n        // .package(url: /* package url */, from: \\"1.0.0\\"),\\n    ],\\n    targets: [\\n        // Targets are the basic building blocks of a package. A target can define a module or a test suite.\\n        // Targets can depend on other targets in this package, and on products in packages which this package depends on.\\n        .target(\\n            name: \\"StuWeDD\\",\\n            dependencies: []),\\n        .testTarget(\\n            name: \\"StuWeDDTests\\",\\n            dependencies: [\\"StuWeDD\\"]),\\n    ]\\n)\\n"
                     }
                   }
                 },
@@ -132,9 +151,9 @@ class GitHubTests: XCTestCase {
               ]
             },
             "rateLimit": {
-              "cost": 3,
-              "remaining": 4797,
-              "resetAt": "2017-07-30T11:41:21Z"
+              "cost": 2,
+              "remaining": 4984,
+              "resetAt": "2017-08-09T09:33:42Z"
             }
           }
         }
@@ -149,6 +168,7 @@ class GitHubTests: XCTestCase {
         XCTAssertEqual(response.data?.repositories.count, 3)
         XCTAssertEqual(response.data?.repositories[0].nameWithOwner, "kiliankoe/DVB")
         XCTAssertTrue(response.data?.repositories[0].hasPackageManifest ?? false)
+        XCTAssertEqual(response.data?.repositories[0].dependencies ?? [], ["utahiosmac/Marshal", "kiliankoe/gausskrueger"])
     }
 
 //    func testGitHubRequest() {

@@ -177,6 +177,6 @@ extension Repository {
         self.stargazers = 0
         self.tags = ["0.1.0"]
         self.heads = ["master"]
-        self.hasPackageManifest = true
+        self.packageManifest = ""
     }
 }

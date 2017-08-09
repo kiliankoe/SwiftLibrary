@@ -36,7 +36,7 @@ struct RepoQuery: GraphQLQuery {
               }
               packageManifest: object(expression: "master:Package.swift") {
                 ... on Blob {
-                  abbreviatedOid
+                  text
                 }
               }
             }
