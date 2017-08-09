@@ -15,7 +15,7 @@ class CommandTests: XCTestCase {
             ["+", "bar"],
         ]
         for command in validCommands {
-            guard let _ = Command(from: command) else {
+            if Command(from: command) == nil {
                 XCTFail("Failed to initialize valid command with \(command)")
                 return
             }
@@ -26,7 +26,7 @@ class CommandTests: XCTestCase {
             ["foobar"],
         ]
         for command in invalidCommands {
-            if let _ = Command(from: command) {
+            if Command(from: command) != nil {
                 XCTFail("Initialized invalid command")
             }
         }

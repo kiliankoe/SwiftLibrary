@@ -9,7 +9,7 @@ import Files
 
 let cli = CommandLine()
 
-cli.formatOutput = { s, type in
+cli.formatOutput = { s, type in // swiftlint:disable:this identifier_name
     let str: String
     switch type {
     case .error:
@@ -80,7 +80,7 @@ guard config.githubAccessToken != Config.tokenPlaceholder else {
 let spinner = Spinner(pattern: .dots, text: "Searching on GitHub...", color: .lightCyan)
 spinner.start()
 
-Signals.trap(signal: .int) { signal in
+Signals.trap(signal: .int) { _ in
     spinner.unhideCursor()
     exit(1)
 }

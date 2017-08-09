@@ -73,7 +73,7 @@ class ManifestTests: XCTestCase {
         """
 
         do {
-            let _ = try Manifest.findDependenciesInsertLocation(in: manifestWithoutDependencies)
+            _ = try Manifest.findDependenciesInsertLocation(in: manifestWithoutDependencies)
             XCTFail("Shouldn't find insert points in manifest without a list of dependencies.")
         } catch {
             XCTAssert(error is Manifest.Error)

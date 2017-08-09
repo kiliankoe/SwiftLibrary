@@ -80,7 +80,7 @@ public enum Command {
 }
 
 extension Command: Equatable {
-    public static func ==(lhs: Command, rhs: Command) -> Bool {
+    public static func == (lhs: Command, rhs: Command) -> Bool {
         switch (lhs, rhs) {
         case (.search(let lhss), .search(let rhss)): return lhss == rhss
         case (.info(let lhsi), .info(let rhsi)): return lhsi == rhsi

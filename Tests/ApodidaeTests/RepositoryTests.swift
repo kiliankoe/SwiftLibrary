@@ -32,14 +32,14 @@ class RepositoryTests: XCTestCase {
         XCTAssertEqual(swift3Representable, ".Package(url: \"https://github.com/kiliankoe/apodidae\", majorVersion: 0, minor: 1),")
 
         do {
-            let _ = try repo.dependencyRepresentation(for: .v3, requirement: .branch("master"))
+            _ = try repo.dependencyRepresentation(for: .v3, requirement: .branch("master"))
             XCTFail("Branch requirement should not be representable in Swift 3.")
         } catch {
             XCTAssert(error is Repository.DependencyRepresentationError)
         }
 
         do {
-            let _ = try repo.dependencyRepresentation(for: .v3, requirement: .revision("foobar"))
+            _ = try repo.dependencyRepresentation(for: .v3, requirement: .revision("foobar"))
             XCTFail("Revision requirement should not be representable in Swift 3.")
         } catch {
             XCTAssert(error is Repository.DependencyRepresentationError)

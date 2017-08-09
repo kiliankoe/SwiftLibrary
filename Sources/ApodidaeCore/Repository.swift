@@ -21,10 +21,7 @@ public struct Repository: Decodable {
     public let packageManifest: String?
 
     public var hasPackageManifest: Bool {
-        if let _ = self.packageManifest {
-            return true
-        }
-        return false
+        return self.packageManifest != nil
     }
 
     public var dependencies: [String] {
@@ -154,7 +151,7 @@ public struct Repository: Decodable {
         \(description ?? "No description available".italic)
 
         \(license ?? "No license found")
-        
+
         \(stargazers) stargazers
         \(openIssues) open issues
 

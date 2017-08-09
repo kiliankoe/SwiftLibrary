@@ -1,0 +1,13 @@
+disabled_rules:
+  - line_length
+  - trailing_comma
+
+excluded:
+  - .build
+  - Tests
+
+identifier_name:
+  excluded:
+    - APODIDAE_VERSION
+    - v3
+    - v4
