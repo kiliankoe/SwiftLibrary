@@ -66,6 +66,9 @@ MIT License
 Last activity: 2017-07-29 14:30:05
 Last versions: 3.6.1, 3.6.0, 3.5.0, 3.4.1, 3.4.0
 Branches: develop, master
+
+Dependencies:
+  None
 ```
 
 You can also run `swift catalog home rxswift` to directly open the homepage to a specific package in your browser. You may know this feature from homebrew.
