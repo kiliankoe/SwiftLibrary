@@ -30,7 +30,7 @@ public enum Git {
         let tags = refs
             .filter { $0.hasPrefix("refs/tags") }
             .map { $0.replacingOccurrences(of: "refs/tags/", with: "") }
-            .filter { !$0.contains("^{") } // filter github releases (I think these are releases)
+            .filter { !$0.contains("^{") } // filter non-lightweight tags, they're duplicates anyway
             .map { tag -> String in
                 if tag.lowercased().hasPrefix("v") {
                     return String(tag.dropFirst())
