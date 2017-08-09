@@ -137,7 +137,7 @@ public struct Repository: Decodable {
         let priv = isPrivate ? "private" : ""
         let fork = "Fork of \(parent ?? "unknown")".lightBlue
 
-        let dependencies = self.dependencies.isEmpty ? "  None" : "  " + self.dependencies.joined(separator: "\n  ")
+        let dependencies = self.dependencies.isEmpty ? "None" : self.dependencies.joined(separator: "\n  ")
 
         var output = """
         \(owner.bold.italic)/\(name.lightCyan.bold) \(latestVersion ?? "unreleased".italic) \(priv.yellow)
@@ -163,7 +163,7 @@ public struct Repository: Decodable {
         Branches: \(heads.joined(separator: ", "))
 
         Dependencies:
-        \(dependencies)
+          \(dependencies)
         """
 
         return output
