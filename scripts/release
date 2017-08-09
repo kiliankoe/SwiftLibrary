@@ -7,6 +7,7 @@ if [ $# -eq 0 ]
 fi
 
 git tag -s -a $1 -m ''
+git push --follow-tags
 
 echo "public let APODIDAE_VERSION = \""$(git describe)"\"" > Sources/ApodidaeCore/Version.swift
 swift build -c release -Xswiftc -static-stdlib
