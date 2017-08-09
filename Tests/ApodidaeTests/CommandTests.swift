@@ -52,14 +52,6 @@ class CommandTests: XCTestCase {
         XCTAssertNil(Command(from: ["add", "foobar@foo:bar"]))
         XCTAssertNil(Command(from: ["add", "foobar@:bar"]))
         XCTAssertNil(Command(from: ["add", "foobar@ "]))
-
-        // I have the feeling verifying these is overvalidating the input. They don't break anything and if the user wants to enter that, sure.
-        XCTAssertNotNil(Command(from: ["add", "foobar@branch:foo:bar"]))
-        XCTAssertNotNil(Command(from: ["add", "foobar@@"]))
-        XCTAssertNotNil(Command(from: ["add", "foobar@a@"]))
-        XCTAssertNotNil(Command(from: ["add", "foobar@a@b"]))
-        XCTAssertNotNil(Command(from: ["add", "foobar@@@"]))
-        XCTAssertNotNil(Command(from: ["add", "foobar@f@a@"]))
     }
 
     func testEquality() {
