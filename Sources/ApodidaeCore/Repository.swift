@@ -17,7 +17,15 @@ public struct Repository: Decodable {
     public let stargazers: Int
     public var tags: [Tag] = []
     public var heads: [Head] = []
-    public let hasPackageManifest: Bool
+    public let packageManifest: String?
+
+    public var hasPackageManifest: Bool {
+        if let _ = self.packageManifest {
+            return true
+        }
+        return false
+    }
+
 
     public var owner: String {
         return nameWithOwner.components(separatedBy: "/").first ?? ""
@@ -54,7 +62,7 @@ public struct Repository: Decodable {
     }
 
     private enum PackageManifestContainer: String, CodingKey {
-        case abbreviatedOid
+        case text
     }
 
     private enum ParentContainer: String, CodingKey {
@@ -83,10 +91,10 @@ public struct Repository: Decodable {
         self.stargazers = try stargazersContainer.decode(Int.self, forKey: .totalCount)
 
         let packageManifestContainer = try? container.nestedContainer(keyedBy: PackageManifestContainer.self, forKey: .packageManifest)
-        if let _ = packageManifestContainer {
-            self.hasPackageManifest = true
+        if let packageManifestContainer = packageManifestContainer {
+            self.packageManifest = try packageManifestContainer.decode(String.self, forKey: .text)
         } else {
-            self.hasPackageManifest = false
+            self.packageManifest = nil
         }
     }
 
