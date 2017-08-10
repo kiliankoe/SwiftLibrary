@@ -13,7 +13,7 @@ let package = Package(
         .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1")),
         .package(url: "https://github.com/JohnSundell/Files", from: "1.10.0"),
         .package(url: "https://github.com/JohnSundell/ShellOut", from: "1.1.0"),
-        .package(url: "https://github.com/kiliankoe/CLISpinner", from: "0.3.3"),
+        .package(url: "https://github.com/kiliankoe/CLISpinner", from: "0.3.4"),
         .package(url: "https://github.com/IBM-Swift/BlueSignals", from: "0.9.48"),
         .package(url: "https://github.com/sharplet/Regex", from: "1.1.0"),
     ],
