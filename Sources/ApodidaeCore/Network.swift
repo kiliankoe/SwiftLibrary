@@ -4,7 +4,14 @@ import PromiseKit
 enum Network {
     static func dataTask(request: URLRequest) -> Promise<Data> {
         return Promise { fulfill, reject in
-            URLSession.shared.dataTask(with: request) { data, response, error in
+            #if os(Linux)
+            let config = URLSessionConfiguration()
+            let session = URLSession(configuration: config)
+            #elseif os(macOS)
+            let session = URLSession.shared
+            #endif
+
+            session.dataTask(with: request) { data, response, error in
                 guard error == nil else {
                     reject(error!)
                     return
