@@ -6,7 +6,7 @@
 
 Apodidae is intended to be the quickest way to search for packages in the Swift ecosystem. By design, Swift pulls dependencies from any git repo, most of which are hosted on GitHub, but distributed amongst many thousands of users. This is fantastic to work with, but what it gains in ease of use, this method definitely lacks in discoverability.
 
-Luckily, GitHub offers a great API which can be utilizied to search for possible dependency candidates for your projects. Apodidae searches for repositories written in Swift that also include a package manifest and match your query thus making the search for packages a very *swift* matter.
+Luckily, GitHub offers a great API which can be utilized to search for possible dependency candidates for your projects. Apodidae searches for repositories written in Swift that also include a package manifest and match your query thus making the search for packages a very *swift* matter.
 
 **tl;dr:** Apodidae is a command-line utility that searches for swift packages on GitHub and helps you add these to your `Package.swift`.
 
