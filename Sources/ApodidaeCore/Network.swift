@@ -5,9 +5,9 @@ enum Network {
     static func dataTask(request: URLRequest) -> Promise<Data> {
         return Promise { fulfill, reject in
             #if os(Linux)
-            let config = URLSessionConfiguration()
+            let config = URLSessionConfiguration.default
             let session = URLSession(configuration: config)
-            #elseif os(macOS)
+            #else
             let session = URLSession.shared
             #endif
 
