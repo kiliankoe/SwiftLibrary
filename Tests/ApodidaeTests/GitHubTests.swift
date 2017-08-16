@@ -186,8 +186,10 @@ class GitHubTests: XCTestCase {
 //        waitForExpectations(timeout: 5)
 //    }
 
-    static var allTests = [
-        ("testDeserialization", testDeserialization),
+    static var allTests: [(String, (GitHubTests) -> () throws -> Void)] {
+        return [
+            ("testDeserialization", testDeserialization),
 //        ("testGitHubRequest", testGitHubRequest),
-    ]
+        ]
+    }
 }

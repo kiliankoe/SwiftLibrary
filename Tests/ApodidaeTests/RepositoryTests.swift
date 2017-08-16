@@ -45,4 +45,12 @@ class RepositoryTests: XCTestCase {
             XCTAssert(error is Repository.DependencyRepresentationError)
         }
     }
+    
+    static var allTests: [(String, (RepositoryTests) -> () throws -> Void)] {
+        return [
+            ("testNameAndOwner", testNameAndOwner),
+            ("testLatestVersion", testLatestVersion),
+            ("testDependencyRepresentation", testDependencyRepresentation),
+        ]
+    }
 }

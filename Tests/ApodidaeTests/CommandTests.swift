@@ -72,10 +72,13 @@ class CommandTests: XCTestCase {
         XCTAssertNotEqual(Command.info("foo"), Command.add(package: "foo", requirement: .tag("1.0.0")))
     }
 
-    static var allTests = [
-        ("testInit", testInit),
-        ("testSimpleQueries", testSimpleQueries),
-        ("testAdd", testAdd),
-        ("testEquality", testEquality),
-    ]
+    static var allTests: [(String, (CommandTests) -> () throws -> Void)] {
+        return [
+            ("testInit", testInit),
+            ("testSimpleQueries", testSimpleQueries),
+            ("testAdd", testAdd),
+            ("testEquality", testEquality),
+        ]
+    }
+    
 }
