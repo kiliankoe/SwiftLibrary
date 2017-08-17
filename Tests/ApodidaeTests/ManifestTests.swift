@@ -160,6 +160,17 @@ class ManifestTests: XCTestCase {
         """
         XCTAssertEqual(newManifest, expected)
     }
+    
+    static var allTests: [(String, (ManifestTests) -> () throws -> Void)] {
+        return [
+            ("testLineNumberOfMatches", testLineNumberOfMatches),
+            ("testFindDependenciesInsert", testFindDependenciesInsert),
+            ("testFailingDependenciesInsert", testFailingDependenciesInsert),
+            ("testInsertPackageIntoManifestWithoutPackages", testInsertPackageIntoManifestWithoutPackages),
+            ("testInsertPackageIntoManifestWitSingleLineDependencies", testInsertPackageIntoManifestWitSingleLineDependencies),
+            ("testInsertPackageIntoManifestWithPackages", testInsertPackageIntoManifestWithPackages),
+        ]
+    }
 }
 
 extension Repository {

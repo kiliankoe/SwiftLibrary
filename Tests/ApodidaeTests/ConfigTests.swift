@@ -18,7 +18,10 @@ class ConfigTests: XCTestCase {
         XCTAssertEqual(encoded, json)
     }
 
-    static var allTests = [
-        ("testSerialization", testSerialization),
-    ]
+    static var allTests: [(String, (ConfigTests) -> () throws -> Void)] {
+        return [
+            ("testSerialization", testSerialization),
+        ]
+    }
+    
 }

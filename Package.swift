@@ -22,10 +22,10 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "ApodidaeCore",
-            dependencies: ["PromiseKit", "Files", "Rainbow", "Regex", "CLISpinner"]),
+            dependencies: ["PromiseKit", "Files", "Rainbow", "Regex", "CLISpinner", "ShellOut"]),
         .target(
             name: "swift-catalog",
-            dependencies: ["ApodidaeCore", "CommandLine", "ShellOut", "CLISpinner", "Signals"]),
+            dependencies: ["ApodidaeCore", "CommandLine", "CLISpinner", "Signals"]),
         .testTarget(
             name: "ApodidaeTests",
             dependencies: ["ApodidaeCore"]),
