@@ -185,9 +185,9 @@ public struct Repository: Decodable {
         case .v3:
             guard case .tag(let version) = requirement else { throw DependencyRepresentationError.notRepresentableWithSwift3(requirement) }
             let versionComponents = version.components(separatedBy: ".")
-            return ".Package(url: \"\(self.url)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1])),"
+            return ".Package(url: \"\(self.url.absoluteString)\", majorVersion: \(versionComponents[0]), minor: \(versionComponents[1])),"
         case .v4:
-            return ".package(url: \"\(self.url)\", \(requirement.packageString)),"
+            return ".package(url: \"\(self.url.absoluteString)\", \(requirement.packageString)),"
         }
     }
 }
