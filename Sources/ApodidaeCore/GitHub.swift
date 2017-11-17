@@ -1,6 +1,5 @@
 import Foundation
 import PromiseKit
-import CLISpinner
 
 protocol GraphQLQuery {
     associatedtype Response: Decodable
@@ -194,9 +193,9 @@ public enum GitHub {
         }
     }
 
-    public static func firstRepoIncludingRefs(with query: String, accessToken: String, searchForks: Bool, spinner: Spinner? = nil) -> Promise<(repo: Repository, meta: MetaInfo)> {
+    public static func firstRepoIncludingRefs(with query: String, accessToken: String, searchForks: Bool, afterRepoResult: (() -> Void)?) -> Promise<(repo: Repository, meta: MetaInfo)> {
         return firstRepo(with: query, accessToken: accessToken, searchForks: searchForks).then { response in
-            spinner?.text = "Fetching list of refs..."
+            afterRepoResult?()
             let (heads, tags) = try Git.ls(remote: response.repo.url.absoluteString)
             var repo = response.repo
             repo.tags = tags

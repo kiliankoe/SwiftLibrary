@@ -102,7 +102,11 @@ case .search(let query):
         exit(1)
     }
 case .info(let input):
-    GitHub.firstRepoIncludingRefs(with: input, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
+    GitHub.firstRepoIncludingRefs(with: input,
+                                  accessToken: config.githubAccessToken,
+                                  searchForks: searchForksFlag.wasSet,
+                                  afterRepoResult: { spinner.text = "Fetching list of refs..." })
+    .then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
@@ -130,7 +134,11 @@ case .home(let input):
         exit(1)
     }
 case .add(let input):
-    GitHub.firstRepoIncludingRefs(with: input.package, accessToken: config.githubAccessToken, searchForks: searchForksFlag.wasSet, spinner: spinner).then { response in
+    GitHub.firstRepoIncludingRefs(with: input.package,
+                                  accessToken: config.githubAccessToken,
+                                  searchForks: searchForksFlag.wasSet,
+                                  afterRepoResult: { spinner.text = "Fetching list of refs..." })
+    .then { response in
         let (repo, meta) = response
 
         spinner.stopAndClear()
