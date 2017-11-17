@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/kiliankoe/CLISpinner",
         "state": {
           "branch": null,
-          "revision": "bbedd66cd39d1763461d03198484e9597b6278b8",
-          "version": "0.3.3"
+          "revision": "75242aa49a7b9543be3d7f7eeda574216f165165",
+          "version": "0.3.4"
         }
       },
       {
@@ -24,17 +24,17 @@
         "repositoryURL": "https://github.com/JohnSundell/Files",
         "state": {
           "branch": null,
-          "revision": "ce154128bd2944871f2808447bd1a4c4df458c4b",
-          "version": "1.10.0"
+          "revision": "c2b337cd9cbe91622830e7e0f8ca76845ba81ca6",
+          "version": "1.12.0"
         }
       },
       {
         "package": "PromiseKit",
         "repositoryURL": "https://github.com/mxcl/PromiseKit",
         "state": {
-          "branch": "swift4-beta1",
-          "revision": "1cd1092b31739af70c81a6708123a0a1ca7eb61a",
-          "version": null
+          "branch": null,
+          "revision": "47367f1df656bf8e976e28fb59e553639efcf73a",
+          "version": "5.0.0"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/JohnSundell/ShellOut",
         "state": {
           "branch": null,
-          "revision": "38cd16db073d7c250cefdda177dc14d11597ed04",
-          "version": "1.1.0"
+          "revision": "c21f7a0e891e1301eac0a1b400857173f98aab45",
+          "version": "1.2.1"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/IBM-Swift/BlueSignals",
         "state": {
           "branch": null,
-          "revision": "99ac410f8ad4a75f0ec9a9d72512d5028e804253",
-          "version": "0.9.48"
+          "revision": "0fab5a9f166e96f17bb9646dc56cd22a6f3c3757",
+          "version": "0.9.50"
         }
       }
     ]
