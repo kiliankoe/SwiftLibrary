@@ -19,7 +19,7 @@ You can of course also install SwiftLibrary manually.
 ```
 $ git clone https://github.com/kiliankoe/SwiftLibrary
 $ cd SwiftLibrary
-$ swift build -c release -Xswiftc -static-stdlib
+$ swift build -c release
 $ cp .build/release/swift-library /usr/local/bin/swift-library
 ```
 
