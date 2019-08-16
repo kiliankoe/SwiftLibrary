@@ -2,8 +2,7 @@
 
 SwiftLibrary is intended to be the quickest way to search for packages in the Swift ecosystem. By design, Swift pulls dependencies from any git repo, most of which are hosted on GitHub, but distributed amongst many thousands of users. This is fantastic to work with, but what it gains in ease of use, this method definitely lacks in discoverability.
 
-SwiftLibrary uses the new and growing Swift Package Index found at [swiftpm.co](https://swiftpm.co), big thanks to [Dave Verwer](https://daveverwer.com)!
-
+Fortunately, projects like [swiftpm.co](https://swiftpm.co) (big thanks to [Dave Verwer](https://daveverwer.com)!) exist, which is a relatively new and growing index of Swift packages. Using SwiftLibrary you can search that index directly from your CLI and quickly find the package you're looking for.
 
 
 ## Installation
