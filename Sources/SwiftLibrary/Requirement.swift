@@ -3,7 +3,7 @@ public enum Requirement {
     case branch(String)
     case revision(String)
 
-    var packageString: String {
+    public var packageString: String {
         switch self {
         case .tag(let version):
             return "from: \"\(version)\""
