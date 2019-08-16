@@ -6,7 +6,7 @@ public struct PackageData: Decodable {
     public let host: String
     public let repositoryIdentifier: String
     public let name: String
-    public let description: String
+    public let description: String?
     public let versions: Versions
     public let releasedAgo: String
     public let swiftVersions: String
