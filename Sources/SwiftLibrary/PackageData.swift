@@ -29,3 +29,16 @@ extension PackageData {
         public let latest_stable: String?
     }
 }
+
+extension PackageData {
+    public var shortDescription: String {
+        return name
+    }
+
+    public var longDescription: String {
+        return """
+        \(name)
+        \(url)
+        """
+    }
+}

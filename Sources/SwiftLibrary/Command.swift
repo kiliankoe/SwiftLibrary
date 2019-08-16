@@ -9,13 +9,13 @@ public enum Command {
     public static var exampleUsage: String {
         return """
         Commands:
-          swift catalog search <query>
+          swift library search <query>
               Search for packages matching query.
-          swift catalog info <package_name>
+          swift library info <package_name>
               Get additional info to a package.
-          swift catalog home <package_name>
+          swift library home <package_name>
               Open the homepage of a package in your browser.
-          swift catalog add <package_name>
+          swift library add <package_name>
               Add the given package to your Package.swift's dependencies.
         """
     }

@@ -13,9 +13,7 @@ let package = Package(
             targets: ["swift-library"])
     ],
     dependencies: [
-//        .package(url: "https://github.com/jatoben/CommandLine", from: "3.0.0-pre1"),
 //        .package(url: "https://github.com/onevcat/Rainbow", from: "2.0.1"),
-//        .package(url: "https://github.com/mxcl/PromiseKit", from: "5.0.0"),
 //        .package(url: "https://github.com/JohnSundell/Files", from: "1.10.0"),
 //        .package(url: "https://github.com/JohnSundell/ShellOut", from: "1.1.0"),
 //        .package(url: "https://github.com/kiliankoe/CLISpinner", from: "0.3.3"),
