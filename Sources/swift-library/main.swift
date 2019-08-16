@@ -35,11 +35,5 @@ case .home(let input):
         print("No package matching query found.")
         exit(1)
     }
-
-    let task = Process()
-    task.launchPath = "/usr/bin/open"
-    task.arguments = [package.url.absoluteString]
-    task.launch()
-case .add(_):
-    print("Functionality not yet implemented.")
+    run(cmd: "/usr/bin/open", args: [package.url.absoluteString])
 }
