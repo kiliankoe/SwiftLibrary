@@ -9,7 +9,7 @@ Fortunately, projects like [swiftpm.co](https://swiftpm.co) (big thanks to [Dave
 
 ```
 $ brew tap kiliankoe/formulae
-$ brew install swift-library
+$ brew install swiftlibrary
 ```
 
 SwiftLibrary conveniently installs as `swift-library` which enables you to just call it as if it were a subcommand on swift itself as `swift library ...`. See the usage examples below for more.
