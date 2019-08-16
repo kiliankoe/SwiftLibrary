@@ -8,13 +8,13 @@ fi
 
 git tag -s -a $1 -m ''
 git push --follow-tags
-open 'https://github.com/kiliankoe/apodidae/releases/new'
+open 'https://github.com/kiliankoe/SwiftLibrary/releases/new'
 
-echo "public let APODIDAE_VERSION = \""$(git describe)"\"" > Sources/ApodidaeCore/Version.swift
-swift build -c release -Xswiftc -static-stdlib
+# echo "public let APODIDAE_VERSION = \""$(git describe)"\"" > Sources/ApodidaeCore/Version.swift
+swift build -c release
 
 cd .build/release
-tar -zcf apodidae.tar.gz swift-catalog
-shasum -a 256 apodidae.tar.gz
+tar -zcf swiftlibrary.tar.gz swift-library
+shasum -a 256 swiftlibrary.tar.gz
 
 open .
