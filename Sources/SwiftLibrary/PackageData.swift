@@ -43,9 +43,33 @@ extension PackageData {
     }
 
     public var longDescription: String {
-        return """
-        \(name)
-        \(url)
+        var output = """
+        \(repositoryIdentifier) \(versions.latest) \(versions.latest_stable ?? "")
+        \(description ?? "No description available")
+
+        \(stargazers) stargazers
+        \(watchers) watchers
+
+        Licensed under \(license ?? "n/a").
+        Supports Swift \(swiftVersions).
+        Last released: \(releasedAgo) ago.
+        Contains \(libraryCount) library/libraries.
+        Contains \(executableCount) executable(s).
+        
         """
+
+        if let macOS = supportedMacosVersion {
+            output += "\nSupports macOS \(macOS)"
+        }
+        if let iOS = supportedIosVersion {
+            output += "\nSupports iOS \(iOS)"
+        }
+        if let tvOS = supportedTvosVersion {
+            output += "\nSupports tvOS \(tvOS)"
+        }
+        if let watchOS = supportedWatchosVersion {
+            output += "\nSupports watchOS \(watchOS)"
+        }
+        return output
     }
 }
