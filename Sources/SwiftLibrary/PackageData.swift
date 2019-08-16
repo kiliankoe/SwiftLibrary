@@ -32,7 +32,14 @@ extension PackageData {
 
 extension PackageData {
     public var shortDescription: String {
-        return name
+        var output = """
+        - \(repositoryIdentifier)
+          \(url.absoluteString)
+        """
+        if let description = self.description, !description.isEmpty {
+            output += "\n  \(description)"
+        }
+        return output
     }
 
     public var longDescription: String {
