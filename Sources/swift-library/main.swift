@@ -27,13 +27,13 @@ case .search(let query):
 case .info(let input):
     guard let package = firstPackage(query: input) else {
         print("No package matching query found.")
-        exit(0)
+        exit(1)
     }
     print(package.longDescription)
 case .home(let input):
     guard let package = firstPackage(query: input) else {
         print("No package matching query found.")
-        exit(0)
+        exit(1)
     }
 
     let task = Process()
