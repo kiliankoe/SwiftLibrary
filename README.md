@@ -1,4 +1,4 @@
-![header](https://user-images.githubusercontent.com/2625584/28789219-b9ffed5c-7624-11e7-8959-792171e75deb.png)
+![header](https://user-images.githubusercontent.com/2625584/63201247-a94b2100-c084-11e9-960e-b3c479dd4afe.png)
 
 SwiftLibrary is intended to be the quickest way to search for packages in the Swift ecosystem. By design, Swift pulls dependencies from any git repo, most of which are hosted on GitHub, but distributed amongst many thousands of users. This is fantastic to work with, but what it gains in ease of use, this method definitely lacks in discoverability.
 
