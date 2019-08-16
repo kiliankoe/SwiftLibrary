@@ -62,18 +62,14 @@ Contains 0 executable(s).
 
 You can also run `swift library home yams` to directly open the homepage to a specific package in your browser. You may know this feature from homebrew.
 
----
-# WIP
-
 #### Adding a package
 
 ```
 $ swift library add yams
-Added ReactiveX/RxSwift to your package manifest.
-✔ Successfully resolved dependencies.
+Your clipboard has been updated, just add it to your package manifest.
 ```
 
-SwiftLibrary will try and edit your manifest accordingly. After adding it to your manifest SwiftLibrary calls out to `swift package resolve` to resolve your new list of dependencies. If unwanted this can be skipped using the flag `--no-resolve`. 
+For the time being SwiftLibrary will not edit your manifest directly, but add everything you need to your clipboard so you can paste it directly into your package manifest.
 
 It's also possible to add a specific version or other requirement. All you have to do is add `@requirement` to the end of the package. This syntax may feel familiar if you've used npm. The following all work.
 
