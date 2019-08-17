@@ -7,8 +7,8 @@ public struct PackageData: Decodable {
     public let repositoryIdentifier: String
     public let name: String
     public let description: String?
-    public let versions: Versions
-    public let releasedAgo: String
+    public let versions: Versions?
+    public let releasedAgo: String?
     public let swiftVersions: String
     public let license: String?
     public let supportedMacosVersion: String?
@@ -44,7 +44,7 @@ extension PackageData {
 
     public var longDescription: String {
         var output = """
-        \(repositoryIdentifier) \(versions.latest) \(versions.latest_stable ?? "")
+        \(repositoryIdentifier) \(versions?.latest ?? "") \(versions?.latest_stable ?? "")
         \(description ?? "No description available")
 
         \(stargazers) stargazers
@@ -52,7 +52,7 @@ extension PackageData {
 
         Licensed under \(license ?? "n/a").
         Supports Swift \(swiftVersions).
-        Last released \(releasedAgo) ago.
+        Last released \(releasedAgo ?? "n/a") ago.
         Contains \(libraryCount) library/libraries.
         Contains \(executableCount) executable(s).
         

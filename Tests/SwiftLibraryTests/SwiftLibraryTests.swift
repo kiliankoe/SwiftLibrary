@@ -8,7 +8,7 @@ final class SwiftLibraryTests: XCTestCase {
         SwiftLibrary.query("Swift Package Manager") { result in
             switch result {
             case .failure(let error):
-                XCTFail("Received error: \(error.localizedDescription)")
+                XCTFail("Received error: \(error)")
                 e.fulfill()
             case .success(let packages):
                 XCTAssertFalse(packages.isEmpty)
