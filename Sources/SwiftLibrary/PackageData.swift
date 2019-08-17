@@ -52,7 +52,7 @@ extension PackageData {
 
         Licensed under \(license ?? "n/a").
         Supports Swift \(swiftVersions).
-        Last released: \(releasedAgo) ago.
+        Last released \(releasedAgo) ago.
         Contains \(libraryCount) library/libraries.
         Contains \(executableCount) executable(s).
         
