@@ -45,7 +45,7 @@ $ swift library search yaml
 #### Getting info on a package
 
 ```
-$ swift info info yams
+$ swift library info yams
 jpsim/Yams 2.0.0
 A Sweet and Swifty YAML parser.
 
