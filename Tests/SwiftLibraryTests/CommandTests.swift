@@ -1,5 +1,5 @@
 import XCTest
-@testable import ApodidaeCore
+@testable import SwiftLibrary
 
 class CommandTests: XCTestCase {
     func testInit() {
@@ -70,15 +70,5 @@ class CommandTests: XCTestCase {
         XCTAssertNotEqual(Command.add(package: "foo", requirement: .tag("0.1.0")), Command.add(package: "bar", requirement: .tag("1.0.0")))
 
         XCTAssertNotEqual(Command.info("foo"), Command.add(package: "foo", requirement: .tag("1.0.0")))
-    }
-
-    static var allTests: [(String, (CommandTests) -> () throws -> Void)] {
-        return [
-            ("testInit", testInit),
-            ("testSimpleQueries", testSimpleQueries),
-            ("testAdd", testAdd),
-            ("testEquality", testEquality),
-        ]
-    }
-    
+    }    
 }
