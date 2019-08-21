@@ -23,13 +23,10 @@ public enum SwiftLibrary {
     }
 
     private static func urlRequest(with query: String) -> URLRequest {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = "api.swiftpm.co"
-        urlComponents.path = "/packages.json"
+        var urlComponents = URLComponents(string: "https://api.swiftpm.co/packages.json")!
         let queryItem = URLQueryItem(name: "query", value: query)
         urlComponents.queryItems = [queryItem]
-        guard let url = urlComponents.url else { fatalError("Failed to create URL") }
+        guard let url = urlComponents.url else { fatalError("Failed to create URL with query: \(query)") }
         return URLRequest(url: url)
     }
 }
